@@ -1,0 +1,2 @@
+AuthName "wp-admin"
+AuthUserFile "/home/projecti/.htpasswds/public_html/deVeL0pment/gabaproject/wp-admin/passwd"

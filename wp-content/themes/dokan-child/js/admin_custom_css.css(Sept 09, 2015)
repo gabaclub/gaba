@@ -1,0 +1,4 @@
+#acf-wine_type ul li{
+margin-right: 0;
+width: 50%;
+}

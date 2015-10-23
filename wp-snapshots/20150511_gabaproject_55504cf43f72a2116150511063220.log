@@ -1,0 +1,75 @@
+********************************************************************************
+PACKAGE-LOG: 2015-05-11 06:33:04
+NOTICE: Do NOT post to public sites or forums 
+********************************************************************************
+VERSION:	0.5.18
+WORDPRESS:	4.2.2
+PHP INFO:	5.5.17 | SAPI: cgi-fcgi
+SERVER:		Apache 
+PHP TIME LIMIT: (0) no time limit imposed 
+PHP MAX MEMORY: 5000M (256M default) 
+MEMORY STACK: 33.5MB 
+
+********************************************************************************
+DATABASE:
+********************************************************************************
+BUILD MODE:   PHP (query limit - 100)
+MYSQLDUMP:    Is Supported
+MYSQLTIMEOUT: 5000 
+TABLES: total:27 | filtered:0 | create:27 
+FILTERED: [] 
+SQL CREATED: 20150511_gabaproject_55504cf43f72a2116150511063220_database.sql 
+SQL FILE SIZE: 627.34KB 
+SQL FILE TIME: 2015-05-11 06:33:04 
+SQL RUNTIME: 0.08 sec. 
+
+******************************************************************************** 
+ARCHIVE (ZIP): 
+******************************************************************************** 
+ARCHIVE DIR:  /home/gabaproj/public_html 
+ARCHIVE FILE: 20150511_gabaproject_55504cf43f72a2116150511063220_archive.zip 
+FILTERS: *OFF* 
+DIRS:  not set 
+EXTS:  not set 
+---------------------------------------- 
+COMPRESSING 
+SIZE:	77.05MB 
+STATS:	Dirs 917 | Files 5,277 | Links 0 
+SQL ADDED: 20150511_gabaproject_55504cf43f72a2116150511063220_database.sql 
+ZipArchive Object
+(
+    [status] => 0
+    [statusSys] => 0
+    [numFiles] => 6194
+    [filename] => /home/gabaproj/public_html/wp-snapshots/tmp/20150511_gabaproject_55504cf43f72a2116150511063220_archive.zip
+    [comment] => 
+)
+ 
+COMPRESSION RESULT: '1' 
+COMPRESSED SIZE: 34.91MB 
+ARCHIVE RUNTIME: 12.30 sec. 
+MEMORY STACK: 35.75MB 
+
+******************************************************************************** 
+MAKE INSTALLER: 
+******************************************************************************** 
+Build Start 
+Build Finished 
+Preping for use 
+Template parsed with new data 
+Complete [/home/gabaproj/public_html/wp-snapshots/tmp/20150511_gabaproject_55504cf43f72a2116150511063220_installer.php] 
+Added to archive 
+
+******************************************************************************** 
+INTEGRITY CHECKS: 
+******************************************************************************** 
+SQL File: 627.34KB 
+Installer File: 316.86KB 
+Archive File: 34.91MB  
+
+********************************************************************************
+RECORD ID:[1]
+TOTAL PROCESS RUNTIME: 12.64 sec.
+PEAK PHP MEMORY USED: 37.75MB
+DONE PROCESSING => 20150511_gabaproject 2015-05-11 06:33:16
+ 

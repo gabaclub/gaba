@@ -1,0 +1,11 @@
+[07-Apr-2015 21:55:06 UTC] WordPress database error Table 'gabaproj_wp118.wp_woocommerce_order_items' doesn't exist for query SELECT oi.order_id, p.ID as product_id, p.post_title, p.post_author as seller_id,
+                oim2.meta_value as order_total, p.post_status as order_status
+            FROM wp_woocommerce_order_items oi
+            INNER JOIN wp_woocommerce_order_itemmeta oim ON oim.order_item_id = oi.order_item_id
+            INNER JOIN wp_woocommerce_order_itemmeta oim2 ON oim2.order_item_id = oi.order_item_id
+            INNER JOIN wp_posts p ON oi.order_id = p.ID
+            WHERE
+                oim.meta_key = '_product_id' AND
+                oim2.meta_key = '_line_total'
+            GROUP BY oi.order_id made by activate_plugin, do_action('activate_dokan/dokan.php'), call_user_func_array, WeDevs_Dokan::activate, Dokan_Installer->do_install, dokan_generate_sync_table
+[17-May-2015 20:37:25 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/gabaproj/public_html/wp-content/themes/Divi/functions.php on line 3304

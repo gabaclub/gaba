@@ -1,0 +1,17 @@
+#acf-wine_type ul li{
+margin-right: 0;
+width: 50%;
+}
+
+.woocommerce_options_panel label, .woocommerce_options_panel legend {
+    margin: 0 0 0 0 !important;
+}
+
+ul.wc-radios li {
+    float: left;
+    display: inline-block;
+    width: 110px;
+}
+.panel-wrap.product_data .woocommerce_options_panel fieldset.form-field, .panel-wrap.product_data .woocommerce_options_panel p.form-field {
+    padding: 5px 20px 5px 20px!important;
+}

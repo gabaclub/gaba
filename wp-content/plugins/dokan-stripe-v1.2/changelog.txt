@@ -1,0 +1,12 @@
+v1.2 ~~> Date: June 20, 2015
+-----------------------------
+- Fix Js checkout problem in stripe.js
+
+v1.1 ~~> Date: June 6, 2015
+-----------------------------
+- Added option to disconnect stripe
+- Don't charge to stripe if a free product
+
+v1.0 ~~> Date: March 25, 2015
+-----------------------------
+- Initial Release

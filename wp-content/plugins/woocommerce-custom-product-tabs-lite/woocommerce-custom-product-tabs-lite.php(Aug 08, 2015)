@@ -1,0 +1,815 @@
+<?php
+/**
+ * Plugin Name: WooCommerce Custom Product Tabs Lite
+ * Plugin URI: http://simpleintelligentsytem.com/wp/plugins
+ * Description: Extends WooCommerce to add a custom product view page tab
+ * Author: SkyVerge
+ * Author URI: http://simpleintelligentsytem.com/
+ * Version: 1.2.9
+ * Tested up to: 4.2
+ * Text Domain: woocommerce-custom-product-tabs-lite
+ * Domain Path: /i18n/languages/
+ */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Check if WooCommerce is active and bail if it's not
+if ( ! WooCommerceCustomProductTabsLite::is_woocommerce_active() ) {
+	return;
+}
+
+/**
+ * The WooCommerceCustomProductTabsLite global object
+ * @name $woocommerce_product_tabs_lite
+ * @global WooCommerceCustomProductTabsLite $GLOBALS['woocommerce_product_tabs_lite']
+ */
+$GLOBALS['woocommerce_product_tabs_lite'] = new WooCommerceCustomProductTabsLite();
+
+class WooCommerceCustomProductTabsLite {
+
+	private $tab_data = false;
+
+	/** plugin version number */
+	const VERSION = "1.2.5";
+
+	/** plugin text domain */
+	const TEXT_DOMAIN = 'woocommerce-custom-product-tabs-lite';
+
+	/** plugin version name */
+	const VERSION_OPTION_NAME = 'woocommerce_custom_product_tabs_lite_db_version';
+
+
+	/**
+	 * Gets things started by adding an action to initialize this plugin once
+	 * WooCommerce is known to be active and initialized
+	 */
+	public function __construct() {
+		// Installation
+		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) $this->install();
+
+		add_action( 'init',             array( $this, 'load_translation' ) );
+		add_action( 'woocommerce_init', array( $this, 'init' ) );
+	}
+
+
+	/**
+	 * Load translations
+	 *
+	 * @since 1.2.5
+	 */
+	public function load_translation() {
+
+		// localization
+		load_plugin_textdomain( 'woocommerce-custom-product-tabs-lite', false, dirname( plugin_basename( __FILE__ ) ) . '/i18n/languages' );
+	}
+
+
+	/**
+	 * Init WooCommerce Product Tabs Lite extension once we know WooCommerce is active
+	 */
+	public function init() {
+		// backend stuff
+		add_action( 'woocommerce_product_write_panel_tabs', array( $this, 'product_write_panel_tab' ) );
+		add_action( 'woocommerce_product_write_panels',     array( $this, 'product_write_panel' ) );
+		add_action( 'woocommerce_process_product_meta',     array( $this, 'product_save_data' ), 10, 2 );
+
+		// frontend stuff
+		add_filter( 'woocommerce_product_tabs', array( $this, 'add_custom_product_tabs' ) );
+
+		// allow the use of shortcodes within the tab content
+//		add_filter( 'woocommerce_custom_product_tabs_lite_content', 'do_shortcode' );
+	}
+	
+
+	/**
+	 * Adds a new tab to the Product Data postbox in the admin product interface
+	 */
+	public function product_write_panel_tab() {
+		echo "<li class=\"product_tabs_lite_tab\"><a href=\"#woocommerce_product_tabs_lite\">" . __( 'Specifications', self::TEXT_DOMAIN ) . "</a></li>";
+	}
+
+
+	/**
+	 * Adds the panel to the Product Data postbox in the product interface
+	 */
+	public function product_write_panel() {
+		global $post;
+		// the product
+
+		if ( defined( 'WOOCOMMERCE_VERSION' ) && version_compare( WOOCOMMERCE_VERSION, '2.1', '<' ) ) {
+			?>
+			<style type="text/css">
+				#woocommerce-product-data ul.product_data_tabs li.product_tabs_lite_tab a { padding:5px 5px 5px 28px;background-repeat:no-repeat;background-position:5px 7px; }
+			</style>
+			<?php
+		}
+
+		// pull the custom tab data out of the database
+		$sp_data = maybe_unserialize( get_post_meta( $post->ID, 'frs_woo_product_specifications', true ) );
+
+		if ( empty( $sp_data ) ) {
+			$sp_data[] = array( 'bottle_size' => '', 'brand' => '', 'distillery' => '', 'alcohal' => '', 'rating' => '', 'category' => '', 'organic' => '' );
+		}
+		
+		$wine_type = array('Anise' =>1, 'Beer' =>2, 'Brandy' =>3, 'Gin' =>4, 'Sake' =>5, 'Soju' => 6, 'Sugar' => 7, 'Taquila' => 8, 'Vodka' => 9, 'Whisky' => 10, 'Wine' => 11);
+		
+		$category = get_the_terms($post->ID, 'product_cat');
+				
+		self::gen_custom_field_anise($sp_data, $category[0]->name);
+	}
+
+
+		/**
+	 * Saves the data inputed into the product boxes, as post meta data
+	 * identified by the name 'frs_woo_product_tabs'
+	 *
+	 * @param int $post_id the post (product) identifier
+	 * @param stdClass $post the post (product)
+	 */
+	public function product_save_data( $post_id, $post ) {
+
+		$sp_bottle_size = stripslashes( $_POST['_wc_custom_product_tabs_lite_bottle_size'] );
+		$sp_brand = stripslashes( $_POST['_wc_custom_product_tabs_lite_brand'] );
+		$sp_distillery = stripslashes( $_POST['_wc_custom_product_tabs_lite_distillery'] );
+		$sp_alcohal = stripslashes( $_POST['_wc_custom_product_tabs_lite_alcohal'] );
+		$sp_rating = stripslashes( $_POST['_wc_custom_product_tabs_lite_rating'] );
+		$sp_category = stripslashes( $_POST['_wc_custom_product_tabs_lite_category'] );
+		$sp_organic = stripslashes( $_POST['_wc_custom_product_tabs_lite_organic'] );
+		
+		$updated_category= $_POST['radio_tax_input'];
+		$saved_category = get_the_terms($post->ID, 'product_cat');
+
+		//print_r($saved_category);
+		//print('<pre>'.print_r($updated_category['product_cat'][0], true).'</pre>');
+		//exit;
+
+		if ((empty( $sp_bottle_size ) && empty( $sp_brand ) && empty( $sp_distillery ) && empty( $sp_alcohal ) && empty( $sp_rating ) && empty( $sp_category ) && empty( $sp_organic )) && get_post_meta( $post_id, 'frs_woo_product_specifications', true ) ) {
+			// clean up if the custom tabs are removed
+			delete_post_meta( $post_id, 'frs_woo_product_specifications' );
+		}elseif(isset($saved_category[0]->term_id) && ($saved_category[0]->term_id)!=$updated_category['product_cat'][0]) {
+			delete_post_meta( $post_id, 'frs_woo_product_specifications' );
+		}elseif ( ! empty( $sp_bottle_size ) || ! empty( $sp_brand ) ) {
+			$tab_data = array();
+			
+			//echo '***********';
+			
+			
+			$tab_data[] = array( 'bottle_size' => $sp_bottle_size, 'brand' => $sp_brand, 'distillery'=>$sp_distillery, 'alcohal'=>$sp_alcohal, 'rating'=>$sp_rating, 'category'=>$sp_category, 'organic'=>$sp_organic );
+			
+			//print_r($tab_data);
+			//exit;
+			update_post_meta( $post_id, 'frs_woo_product_specifications', $tab_data );
+		}
+	}
+
+
+	private function woocommerce_wp_textarea_input( $field ) {
+		global $thepostid, $post;
+
+		if ( ! $thepostid ) $thepostid = $post->ID;
+		if ( ! isset( $field['placeholder'] ) ) $field['placeholder'] = '';
+		if ( ! isset( $field['class'] ) ) $field['class'] = 'short';
+		if ( ! isset( $field['value'] ) ) $field['value'] = get_post_meta( $thepostid, $field['id'], true );
+
+		echo '<p class="form-field ' . $field['id'] . '_field"><label style="display:block;" for="' . $field['id'] . '">' . $field['label'] . '</label><textarea class="' . $field['class'] . '" name="' . $field['id'] . '" id="' . $field['id'] . '" placeholder="' . $field['placeholder'] . '" rows="2" cols="20"' . (isset( $field['style'] ) ? ' style="' . $field['style'] . '"' : '') . '>' . esc_textarea( $field['value'] ) . '</textarea> ';
+
+		if ( isset( $field['description'] ) && $field['description'] ) {
+			echo '<span class="description">' . $field['description'] . '</span>';
+		}
+
+		echo '</p>';
+	}
+
+	/**
+	 * Checks if WooCommerce is active
+	 *
+	 * @since  1.0
+	 * @return bool true if WooCommerce is active, false otherwise
+	 */
+	public static function is_woocommerce_active() {
+
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		if ( is_multisite() ) {
+			$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
+		}
+		return in_array( 'woocommerce/woocommerce.php', $active_plugins ) || array_key_exists( 'woocommerce/woocommerce.php', $active_plugins );
+	}
+
+
+	/** Lifecycle methods ******************************************************/
+
+
+	/**
+	 * Run every time.  Used since the activation hook is not executed when updating a plugin
+	 */
+	private function install() {
+
+		global $wpdb;
+
+		$installed_version = get_option( self::VERSION_OPTION_NAME );
+
+		// installed version lower than plugin version?
+		if ( -1 === version_compare( $installed_version, self::VERSION ) ) {
+			// new version number
+			update_option( self::VERSION_OPTION_NAME, self::VERSION );
+		}
+	}
+
+	public static function gen_custom_field_anise($sp_data, $cat_name){
+		foreach ( $sp_data as $tab ) 
+			{
+			// display the custom field
+			echo '<center>'.$cat_name.'</center>';
+			echo '<div id="woocommerce_product_tabs_lite" class="panel wc-metaboxes-wrapper woocommerce_options_panel">';
+						
+			switch($cat_name)
+			{
+			
+				case 'Anise':
+				
+						woocommerce_wp_text_input( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size', 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+				
+						$brands= array('' => 'Select Brand',
+							1 => 'Absinthe Brands',
+							2 => '-Abyss',
+							3 => '-Corsair',
+							4 => '-Fee Verte',
+							5 => '-Grande Absente');
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+			
+			$cats= array(''=>'Select Category', 'amr_brandy'=>'American Brandy', 'armagnac'=>'Armagnac', 'brandy_jerez'=>'Brandy de Jerez', 'calvados'=>'Calvados', 'cognac'=>'Cognac', 'eau-d'=>'Eau-de-vie', 'french'=>'French Brandy', 'flavored'=>'Flavored Brandy', 'grappa'=>'Grappa', 'kanyak'=>'Kanyak', 'pisco'=>'Pisco', 'spanish_brandy'=>'Spanish Brandy', 'stravecchio'=>'Stravecchio');
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+			
+			woocommerce_wp_text_input( array( 'id' => '_wc_custom_product_tabs_lite_distillery', 'label' => __( 'Distillery', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distillery'] ) );
+			
+					break;
+				case 'Beer':
+						
+					break;
+				case 'Brandy':
+						$bottle_size= array (''=> 'Select Size', 
+												180 => '180 ml',	
+												200 => '200 ml',
+												300 => '300 ml',
+												330 => '330 ml',
+												350 => '350 ml',
+												500 => '500 ml',
+												700 => '700 ml',
+												720 => '720 ml',
+												1750 => '1750 ml (1.75L)');
+												
+					woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size', 'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+				
+						$brands= array (''=> 'Select Brand', 
+										1 => 'Baron de Sigognac',		
+										2 => 'Camus',		
+										3 => 'Christian Brothers',		
+										4 => 'Courvoisier',		
+										5 => 'Darroz');
+										
+					woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+				
+						$flavour= array(''=>'Select Flavour',
+										1 => 'Apricot',
+										2 => 'Blackberry',
+										3 => 'Cherry',
+										4 => 'Cinnamon',
+										5 => 'Coffee');
+										
+				woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_flavour', 'options'=>$flavour, 'label' => __( 'Flavour Type', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['flavour'] ) );		
+						
+						
+							$cats= array(''=>'Select Category',
+										1 =>'American Brandy',
+										2 => 'Armagnac',
+										3 => 'Brandy de Jerez', 
+										4 => 'Calvados', 
+										5 => 'Cognac');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+				
+						$fruits= array('apple'=>'Apple', 'apricot'=>'Apricot', 'blueberry'=>'Blueberry', 'cherry'=>'Cherry', 'peach'=>'Peach');
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_fruit',  'options'=>$fruits, 'label' => __( 'Fruit', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['fruit'] ) );
+			
+							$gift= array(''=>'Gift Wrapping',
+											1 => 'True',
+											0 => 'False');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_gift', 'options'=>$gift, 'label' => __( 'Gift Wrapping', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['gift'] ) );			
+			
+					break;
+				case 4:
+						
+					break;
+				case 'Gin':
+						$brands= array (''=> 'Aviation American Gin', 
+										0 => 'Beefeater',	
+										1 => 'The Botanist',		
+										2 => 'Blackwoods',		
+										3 => 'Bombay Sapphire',		
+										4 => 'Boodles British Gin',		
+										5 => 'Booths Gin', 		
+										6 => 'Brokers Gin', 		
+										7 => 'Catoctin Creek',
+										8 => 'Citadelle',		
+										9 => 'Cork Dry Gin',		
+										10 => 'Damrak',		
+										11 => 'Gilbeys',		
+										12 => 'Gilpins Westmorland Extra Dry Gin', 		
+										14 => 'Ginebra San Miguel',		
+										15 => 'Gordons',		
+										16 => 'Greenalls',	
+										17 => 'Haymans Old Tom',		
+										18 => 'Hendrick Gin',		
+										19 => 'Konig Westphalian Gin',		
+										20 => 'Leopolds Gin',		
+										21 => 'New Amsterdam Gin',		
+										22 => 'Nicholsons', 		
+										23 => 'Plymouth', 		
+										24 => 'Pickerings',	
+										25 => 'Sacred Microdistillery',	
+										26 => 'Seagrams', 		
+										27 => 'Sipsmith',		
+										28 => 'Smeets',		
+										29 => 'South Gin',		
+										30 => 'Steinhäger',		
+										31 => 'Strane',	
+										31 => 'St. George', 		
+										32 => 'Taaka', 		
+										33 => 'Tanqueray',		
+										34 => 'Uganda Waragi', 		
+										35 => 'Whitley Neill Gin');
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+								
+								$style= array (''=> 'Select Style', 
+												1 => 'Distilled Gin',
+												2 => 'Gin',	
+												3 => 'Juniper Flavored Spirit',		
+												4 => 'London Gin');
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_production', 'options'=>$production, 'label' => __( 'Production Method', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['production'] ) );
+								
+								$production= array (''=> 'Select Production Method', 
+													1 => 'Column Distilled Gin',	
+													2 => 'Compound Gin',		
+													3 => 'Post distilled gin');
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_production', 'options'=>$production, 'label' => __( 'Production Method', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['production'] ) );
+					break;
+				case 'Liquor':
+						
+						$bottle_size= array (''=> 'Select Size', 
+												180 => '180 ml',	
+												200 => '200 ml',
+												300 => '300 ml',
+												330 => '330 ml',
+												350 => '350 ml',
+												500 => '500 ml',
+												700 => '700 ml',
+												720 => '720 ml',
+												1750 => '1750 ml (1.75L)');
+													
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+			
+						$brands= array (''=> 'Select Brand', 
+										1 => '99 Apples',		
+										2 => '99 Bananas',		
+										3 => '99 Blackberries',		
+										4 => '99 Oranges',		
+										5 => 'Absente');
+										
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+								
+						$cats= array(''=>'Select Category',
+										1 =>'Absinthe',
+										2 => 'Aquardiente',
+										3 => 'Anisette', 
+										4 => 'Arak', 
+										5 => 'Ouzo');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+						
+						$flavour= array(''=>'Select Flavour',
+													1 => 'Acai',
+													2 => 'Acorns',
+													3 => 'Almonds',
+													4 => 'Alpine',
+													5 => 'Anise');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_flavour', 'options'=>$flavour, 'label' => __( 'Flavour Type', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['flavour'] ) );
+			
+							$gift= array(''=>'Gift Wrapping',
+											1 => 'True',
+											0 => 'False');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_gift', 'options'=>$gift, 'label' => __( 'Gift Wrapping', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['gift'] ) );
+						
+					break;
+				case 'Sake':
+							$bottle_size= array (''=> 'Select Size', 
+													180 => '180 ml',	
+													200 => '200 ml',
+													300 => '300 ml',
+													330 => '330 ml',
+													350 => '350 ml',
+													500 => '500 ml',
+													700 => '700 ml',
+													720 => '720 ml',
+													1800 => '1800 ml (1.8L)',	
+													2000 => '2000 ml (2L)');
+						woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+						
+							$brands= array ( '' => 'Select Brand',
+											0 => 'Akita Homare',
+											1 => 'Akita Seishu',
+											2 => 'Amanoto Junmai',
+											3 => 'Azumaichi Junmai',
+											4 => 'Biwa No Choju',
+											5 => 'Bizen Maboroshi Junmai Ginjo',
+											6 => 'Bizen Marboroshi JMG',
+											7 => 'Muroma',
+											8 => 'Born "Nihon No Tsubasa" Junmai Daiginjo',
+											9 => 'Born Tokusen Junmai Daiginjo',
+											10 => 'Born Junmai Daiginjo (Genshu)',
+											11 => 'Bunraku Nihon-Jin Wasuremono',
+											12 => 'Choryu Tsukihi Kasanete',
+											13 => 'Dassai 23 Junmai Daiginjo',
+											14 => 'Dassai 39 Junmai Daiginjo',
+											15 => 'Dassai 39 Sparkling Nigori',
+											16 => 'Dassai 50 Junmai Daiginjo',
+											17 => 'Dassai 50 Nigori JM Daiginjo',
+											18 => 'Dassai 50 Nigori JMD',
+											19 => 'Dewarsuru Sakura Emaki',
+											20 => 'Echigo Tsurukame Junmai',
+											21 => 'Fujii',
+											22 => 'Fukucho "Biho" Junmai Ginjo',
+											23 => 'Gin-Sumyoshi Tokubetsu Junmai',
+											24 => 'Go-Okunen Junmai Daginjo',
+											25 => 'Hakkaisan Ginjo',
+											26 => 'Hakkaisan Honjozo',
+											27 => 'Hakkaisan Junmai Ginjo',
+											28 => 'Hakkaisan Seishu',
+											29 => 'Hakkaisan Tokubetsu Junmai',
+											30 => 'Hakuro Suishu Junmai Ginjo',
+											31 => 'Hisui Red Sake',
+											32 => 'Hyosho Usunigori Junmai Ginjo',
+											33 => 'Kakunko Junmai Daiginjo',
+											34 => 'Kanchiku',
+											35 => 'Kamosuru Junmai',
+											36 => 'Kamotsuru Junmai Ginjo',
+											37 => 'Kamotsuru Namakakoi Junmai',
+											38 => 'Kamotsuru Sokaku Daiginjo',
+											39 => 'KamotsuruTokusei Gold Daiginjo',
+											40 => 'Kiku-Masamune',
+											41 => 'Kiku-Masamune Taru Sake',
+											42 => 'Kiku-Masamune Junmai Ginjo',
+											43 => 'Kikusui Junmai',
+											44 => 'Kikusui Junmai Ginjo',
+											45 => 'Kikusui Funaguchi Honjo',
+											46 => 'Kikusui  Funaguchi HonJozo',
+											47 => 'Kikusui Funafuchi Jukusei (Aged)',
+											48 => 'Kikusui No Karakuchi Honjozo',
+											49 => 'Kikusui  Organic Junmai Ginjo',
+											50 => 'Kirin Koshi Hikari Junmai Daiginjo',
+											51 => 'Kirin Koshi No Takumi Tokubetsu Junmai',
+											52 => 'Kubota Hekiju JM Daiginjo',
+											53 => 'Kubota Hyakuju Honjozo',
+											54 => 'Kubota Kouju TB Junmai',
+											55 => 'Kubota Manju JM Daiginjo',
+											56 => 'Kubota Denju',
+											57 => 'Kubota Senju TB Honjozo',
+											58 => 'Kuro Kabuto Junmai Daiginjo',
+											59 => 'Miyozakura Junmai',
+											60 => 'Miyozakura Junmai Daiginjo',
+											61 => 'Muromachi-Jidai Gokudaigin',
+											62 => 'Muromachi-Jidai Goku Daiginjo',
+											63 => 'Mushohai Junmai Ginjo',
+											64 => 'Nagaragawa Sparkling Nigori',
+											65 => 'Nagaragawa Tebkawa JG',
+											66 => 'Nanbu Bijin Daiginjo',
+											67 => 'Nanbu Bijin Tokubetsu Junmai',
+											68 => 'Nanbu Bijin Tokubetsu Junmai "Nmazake"',
+											69 => 'Oze No Yukidoke JMD Genshu',
+											70 => 'Reishu Tamano Hikari JM Ginjo',
+											71 => 'Senshin Junmai Daiginjo',
+											72 => 'Seven Sumarai Junmai',
+											73 => 'Shimeharitsuru Jun Junmai Ginjo 
+											74 => Shirakabe-Gura TB Junmai',
+											75 => 'Shirakabe-Gura JM Ginjo',
+											76 => 'Square One Junmai',
+											77 => 'Suigei TB Junmai',
+											78 => 'Suigei Tokubetsu Junmai',
+											79 => 'Sumiyoshi Koshu (Aged Sake)',
+											80 => 'Sumiyoshi Tokubetsu Junmai Goku Karakuchi',
+											81 => 'Taisetsu Junmain Ginjo',
+											82 => 'Take No Tsuyu Junmai',
+											83 => 'Tamajinman Junmai Muroka',
+											84 => 'Tamajiman Yamahai JM Genshu',
+											85 => 'Tamano Hikari Junmai Daiginjo',
+											86 => 'Tamano Hikari Yamahai Junmai Ginjo',
+											87 => 'Tengumai Umagin Ginjo',
+											88 => 'Tengumai Umajun Junmai',
+											89 => 'Tokugetsu Junmai Daiginjo',
+											90 => 'Tokusen Tamano Hikari Junmai Ginjo',
+											91 => 'Yuki Honoka Junmai'
+										  );
+						woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+						
+							$cats= array(''=>'Select Category',
+										'tokutei_meishoshu'=>'Tokutei Meishoshu',
+										'daiginjo'=> 'Daiginjo',
+										'futsushu'=> 'Futsushu', 
+										'ginjo'=> 'Ginjo', 
+										'junmai'=> 'Junmai', 
+										'junmai_daiginjo'=> 'Junmai Daiginjo', 
+										'jumai_ginjo'=> 'Jumai Ginjo', 
+										'honjozo'=> 'Honjozo', 
+										'tokubetsu_honjozo'=> 'Tokubetsu Honjozo', 
+										'tokubetshu_junmai'=> 'Tokubetshu Junmai');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+			
+							$grade= array(''=>'Select Grade',
+										'daiginjo'=> 'Daiginjo', 
+										'ginjo'=> 'Ginjo', 
+										'honjozo'=> 'Honjozo', 
+										'junmai'=> 'Junmai');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_grade', 'options'=>$grade, 'label' => __( 'Grade', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['grade'] ) );
+			
+							$brewery= array(''=>'Select Brewery',
+											0 => 'Akita Seishu Shuzo',
+											1 => 'Asahi Shuzo',
+											2 => 'Asamai Shuzo',
+											3 => 'Gochoda Shuzo',
+											4 => 'Hakkai Jozo',
+											5 => 'Imada Shuzo',
+											6 => 'Ikegami Shuzo',
+											7 => 'Ishikawa Shuzo',
+											8 => 'Kaetsu Shuzo',
+											9 => 'Kamotsuru Shuzo',
+											10 => 'Katokichibee Shoten',
+											11 => 'Kikumasamune Shuzo',
+											12 => 'Kikusui Shizo',
+											13 => 'Masuichi Ichimura Shuzo',
+											14 => 'Miyao Shuzo',
+											15 => 'Miyozakura Shuzo',
+											16 => 'Muromachi Shuzo',
+											17 => 'Nanbubijin Co. Ltd.',
+											18 => 'Ryujin Shuzo',
+											19 => 'akeroku Shuzo',
+											20 => 'Shata Shuzo',
+											21 => 'Sudo Honke Shuzo',
+											22 => 'Tabata Shuzo',
+											23 => 'Takara Shuzo',
+											24 => 'Takasago Shuzo',
+											25 => 'Takenotsuyu Shuzo',
+											26 => 'Tamanohikari Shuzo',
+											27 => 'Taruhei Shuzo',
+											28 => 'Totsuka Shuzo',
+											29 => 'Toyosawa Shuzo',
+											30 => 'Uehara Shuzo');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_brewary', 'options'=>$brewery, 'label' => __( 'Brewery', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['brewery'] ) );
+			
+								$brew_method= array(''=>'Select Brewery Method',
+											1 => 'Kimoto',
+											2 => 'Sokugo',
+											3 => 'Yamahai');
+			
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_brew_method', 'options'=>$brew_method, 'label' => __( 'Brewery Method', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['brew_method'] ) );
+											
+					break;
+				case 'Soju/Sochu':
+								$bottle_size= array (''=> 'Select Size', 
+													180 => '180 ml',	
+													200 => '200 ml',
+													300 => '300 ml',
+													330 => '330 ml',
+													350 => '350 ml',
+													500 => '500 ml',
+													700 => '700 ml',
+													720 => '720 ml',
+													1800 => '1800 ml (1.8L)',	
+													2000 => '2000 ml (2L)');
+						woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+						
+						$brands= array (''=> 'Select Brand', 
+										1 => 'Bunzo Kome',		
+										2 => 'Charm Soju Liquor',		
+										3 => 'Chamisul Fresh Soju',		
+										4 => 'Chum Churum Cool Soju',		
+										5 => 'Denen Mugi');
+										
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+								
+							$brewery= array(''=>'Select Brewery',
+											1 => 'Anami Oshima',
+											2 => 'Asahi',
+											3 => 'Denen',
+											4 => 'Hamada',
+											5 => 'Jikuya');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_brewary', 'options'=>$brewery, 'label' => __( 'Brewery', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['brewery'] ) );		
+						
+					break;
+				case 'Tequila':
+							$bottle_size= array (''=> 'Select Size', 
+													180 => '180 ml',	
+													200 => '200 ml',
+													300 => '300 ml',
+													330 => '330 ml',
+													350 => '350 ml',
+													500 => '500 ml',
+													700 => '700 ml',
+													720 => '720 ml',
+													1750 => '1750 ml (1.75L)');
+						woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+						
+						
+						$brands= array ( '' => 'Select Brand',
+											1 => '123 Tequila',
+											2 => '1519',
+											3 => '1800',
+											4 => '1921',
+											5 => '2012 Luna Nueva',
+										  );
+						woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+						
+						$cats= array(''=>'Select Category',
+										1 => 'Blancos',
+										2 => 'Joven-Gold',
+										3 => 'reposados', 
+										4 => 'anejos', 
+										5 => 'extra anejos', 
+										6 => 'mixtos', 
+										7 => 'Liquers-Flavored');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+			
+						$distillery= array(''=>'Select Distillery',
+										1 => 'Agave Conquista',
+										2 => 'Agave Tequilana',
+										3 => 'Agaveros Unidos de Amatitan', 
+										4 => 'Agaveros y Tequiloeros Unidos de Los Altos', 
+										5 => 'Agroindustrias Casa Ramirez');
+										
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_distillery', 'options'=>$distillery, 'label' => __( 'Distillery', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distillery'] ) );
+			
+						$cooking= array(''=>'Select Cooking Type',
+										1 => 'Brick',
+										2 => 'Ceramic',
+										3 => 'clay', 
+										4 => 'diffuser', 
+										5 => 'stainless steel');
+										
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_cooking', 'options'=>$cooking, 'label' => __( 'Cooking', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['cooking'] ) );
+			
+					$distilation= array(''=>'Select Distilation',
+										1 => 'Double',
+										2 => 'Triple',
+										3 => 'Quadruple', 
+										4 => '5x');
+										
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_distilation', 'options'=>$distilation, 'label' => __( 'Distilation', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distilation'] ) );
+			
+						$distMethod= array(''=>'Select Cooking Type',
+										1 => 'Pot Still-Stainless Steel',
+										2 => 'Column Still',
+										3 => 'Pot Still-Copper', 
+										4 => 'diffuser');
+										
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_distMethod', 'options'=>$distMethod, 'label' => __( 'Distillation Method', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distMethod'] ) );
+			
+						$aging= array(''=>'Select Cooking Type',
+										1 => 'American Oak',
+										2 => 'Blend',
+										3 => 'Bordeaux',
+										4 => 'Bourbon',
+										5 => 'Congan');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_aging', 'options'=>$aging, 'label' => __( 'Barrel Aging Type', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['aging'] ) );
+						
+					break;
+				case 'Spirit':
+						
+						$bottle_size= array (''=> 'Select Size', 
+												180 => '180 ml',	
+												200 => '200 ml',
+												300 => '300 ml',
+												330 => '330 ml',
+												350 => '350 ml',
+												500 => '500 ml',
+												700 => '700 ml',
+												720 => '720 ml',
+												1750 => '1750 ml (1.75L)');
+													
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+			
+						$brands= array (''=> 'Select Brand', 
+										1 => '10 Cane',		
+										2 => '1492 Cristobal Reserve Dark Rum',		
+										3 => '85 Lashes Dark',		
+										4 => '85 Lashes Silver',		
+										5 => 'A.H. Riise 3 - 6 year old');
+										
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+				
+						$flavour= array(''=>'Select Flavour',
+										1 => 'Acai',
+										2 => 'Anise',
+										3 => 'Banaana',
+										4 => 'Blackstrap Molasses',
+										5 => 'Bois Bande');
+										
+				woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_flavour', 'options'=>$flavour, 'label' => __( 'Flavour Type', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['flavour'] ) );		
+						
+						
+							$cats= array(''=>'Select Category',
+										1 =>'Aguardiente',
+										2 => 'Cachaca',
+										3 => 'Flavord Aguardiente', 
+										4 => 'FlavoredCachaca', 
+										5 => 'Flavored Rhum Agricole');
+						
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_category', 'options'=>$cats, 'label' => __( 'Category', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['category'] ) );
+			
+						$distillery= array(''=>'Select Distillery',
+										1 => 'Anguilla',
+										2 => '-Anguilla Rum Company blender / bottler',
+										3 => '-Antigua and Barbuda', 
+										4 => '-Antigua Distillery Limited distiller', 
+										5 => '-Barrettos blender / bottler');
+										
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_distillery', 'options'=>$distillery, 'label' => __( 'Distillery', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distillery'] ) );
+						
+					break;
+				case 'Vodka':
+				
+						$bottle_size= array (''=> 'Select Size', 
+												180 => '180 ml',	
+												200 => '200 ml',
+												300 => '300 ml',
+												330 => '330 ml',
+												350 => '350 ml',
+												500 => '500 ml',
+												700 => '700 ml',
+												720 => '720 ml',
+												1750 => '1750 ml (1.75L)');
+													
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_bottle_size',  'options'=>$bottle_size, 'label' => __( 'Bottle Size*', self::TEXT_DOMAIN ), 'description' => __( '(In ml) ', self::TEXT_DOMAIN ), 'value' => $tab['bottle_size'] ) );
+			
+						$brands= array (''=> 'Select Brand', 
+										1 => '42 Below',		
+										2 => 'Absolut',		
+										3 => 'Absolwent',		
+										4 => 'Adnams',		
+										5 => 'AnestasiA Vodka');
+										
+								woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_brand', 'options'=>$brands, 'label' => __( 'Brand', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['brand'] ) );
+				
+						$flavour= array(''=>'Select Flavour',
+										1 => 'Acai',
+										2 => 'Apple',
+										3 => 'Bacon',
+										4 => 'Bison Gradd',
+										5 => 'Black Currant',
+										6 => 'Blackberry');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_flavour', 'options'=>$flavour, 'label' => __( 'Flavour Type', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['flavour'] ) );
+			
+					$base= array(''=>'Select Base',
+										1 => 'Barley',
+										2 => 'Cereal Grains',
+										3 => 'Corn',
+										4 => 'Fig',
+										5 => 'Fruits');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_base', 'options'=>$base, 'label' => __( 'Base', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['base'] ) );
+			
+					$distill_No= array(''=>'Select Base',
+										4 => '>4',
+										5 => '>5',
+										6 => '>6',
+										7 => '>7',
+										8 => '>8');
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_distill_No', 'options'=>$base, 'label' => __( 'No of Distillation', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['distill_No'] ) );
+			
+					break;
+				default:
+			}
+				
+			
+			woocommerce_wp_text_input( array( 'id' => '_wc_custom_product_tabs_lite_alcohal', 'label' => __( 'Alc./Vol.', self::TEXT_DOMAIN ), 'description' => __( '(Amount in %)', self::TEXT_DOMAIN ), 'value' => $tab['alcohal'] ) );
+			
+						$rating= array(0=>'Select Rating', 1=>1, 2=>2, 3=>3, 4=>4, 5=>5);
+			woocommerce_wp_select(array( 'id' => '_wc_custom_product_tabs_lite_rating',  'options'=>$rating, 'label' => __( 'Rating', self::TEXT_DOMAIN ), 'description' => '', 'value' => $tab['rating'] ) );
+			
+			
+			woocommerce_wp_select( array( 'id' => '_wc_custom_product_tabs_lite_organic', 'options'=>array(1=>'Yes', 0=>'No'), 'label' => __( 'Org Certification', self::TEXT_DOMAIN ), 'label' => __( 'Org Certifications', self::TEXT_DOMAIN ), 'description' => __( '', self::TEXT_DOMAIN ), 'value' => $tab['organic'] ) );
+				echo '</div>';
+		}
+	}	
+
+}
