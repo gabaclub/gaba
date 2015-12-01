@@ -159,6 +159,7 @@ jQuery(window).load(function(e) {
 	$= jQuery.noConflict();
 	$map_area = jQuery('#dokan-store-location-searched');
 	
+	//alert(<?php // echo getLnt($_REQUEST['zipcode']); ?>+'Hii');
 	var manhattan = new google.maps.LatLng(<?php echo $pLatLong['lat']; ?>, <?php echo $pLatLong['lng']; ?>);
 	
 	gmap = new google.maps.Map( $map_area[0], mapOptions);
@@ -187,10 +188,10 @@ jQuery(window).load(function(e) {
 		<?php 
 		if(isset($_REQUEST['zipcode']) && $_REQUEST['zipcode']!='')
 		{ ?>
-					if((distance[i]<=radius) && radius>0)
+					if(distance[i]>=0 && radius>=0)
 					{
 						end= curpoint;
-						console.log('radius searched:'+radius+'Seller Id'+seller.id);
+						//console.log('radius searched: '+radius+' Seller Id '+seller.id+' Distance '+distanceInstant+' Store '+seller.store_name);
 						addMarker(curpoint,seller.store_url,seller.store_name, seller.address, seller.featured);
 					}
 					else if(radius==''|| radius==0)

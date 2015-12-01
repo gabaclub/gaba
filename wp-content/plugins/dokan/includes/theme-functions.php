@@ -1334,6 +1334,14 @@ function state_dropdown( $options, $selected = '', $everywhere = false ) {
     }
     echo '</optgroup>';
 }
+/********************************************* Custom State Dropdown ******************************************/
+function custom_state_dropdown( $options, $selected = '', $everywhere = false ) {
+    printf( '<option value="">%s</option>', __( '- Select a location -', 'dokan-shipping' ) );
+
+    foreach ($options as $key => $value) {
+        printf( '<option value="%s"%s>%s</a>', $value, selected( $selected, $key, true ), $value );
+    }
+}
 
 /**
  * Shupping Processing time dropdown options

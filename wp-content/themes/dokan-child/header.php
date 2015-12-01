@@ -64,27 +64,16 @@
         <header id="masthead" class="site-header" role="banner">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4 col-sm-5">
+                    <div class="col-md-4 col-sm-4">
                         <hgroup>
                             <h1 class="site-title"><a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?> <small> - <?php bloginfo( 'description' ); ?></small></a></h1>
                         </hgroup>
                     </div><!-- .col-md-6 -->
 
-                    <div class="col-md-8 col-sm-7 clearfix">
-                        <?php dynamic_sidebar( 'sidebar-header' ) ?>
-                    </div>
-                </div><!-- .row -->
-            </div><!-- .container -->
-
-            <div class="menu-container">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <nav role="navigation" class="site-navigation main-navigation clearfix">
-                                <h1 class="assistive-text"><i class="icon-reorder"></i> <?php _e( 'Menu', 'dokan' ); ?></h1>
-                                <div class="assistive-text skip-link"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'dokan' ); ?>"><?php _e( 'Skip to content', 'dokan' ); ?></a></div>
-                                    <nav class="navbar navbar-default" role="navigation">
-                                        <div class="navbar-header">
+                    <div class="col-md-8 col-sm-8 clearfix rightSideMenu">
+                        <?php // dynamic_sidebar( 'sidebar-header' ) ?>
+                        <nav class="navbar navbar-default" role="navigation">
+                        <div class="navbar-header">
                                             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                                                 <span class="sr-only"><?php _e( 'Toggle navigation', 'dokan' ); ?></span>
                                                 <i class="fa fa-bars"></i>
@@ -107,7 +96,43 @@
                                             ?><?php */?>
                                         </div>
                                       </div>
-                                    </nav>
+                                      </nav>
+                    </div>
+                </div><!-- .row -->
+            </div><!-- .container -->
+
+            <div class="menu-container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav role="navigation" class="site-navigation main-navigation clearfix">
+                                <h1 class="assistive-text"><i class="icon-reorder"></i> <?php _e( 'Menu', 'dokan' ); ?></h1>
+                                <div class="assistive-text skip-link"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'dokan' ); ?>"><?php _e( 'Skip to content', 'dokan' ); ?></a></div>
+                                   <!-- <nav class="navbar navbar-default" role="navigation">
+                                        <div class="navbar-header">
+                                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                                                <span class="sr-only"><?php // _e( 'Toggle navigation', 'dokan' ); ?></span>
+                                                <i class="fa fa-bars"></i>
+                                            </button>
+                                           
+                                        <div class="collapse navbar-collapse navbar-main-collapse">
+                                        	<a class="navbar-brand" href="<?php // echo home_url(); ?>/"><i class="fa fa-home"></i> <?php // _e( 'Home', 'dokan' ); ?></a>
+                                             <a class="navbar-brand" href="<?php // echo home_url(); ?>/store-listing/"><i class="fa fa-credit-card"></i> <?php // _e( 'Store List', 'dokan' ); ?></a>
+                                             <a class="navbar-brand" href="<?php // echo home_url(); ?>/extras/"><i class="fa fa-external-link-square"></i> <?php // _e( 'Extras', 'dokan' ); ?></a>
+                                             <a class="navbar-brand" href="<?php // echo home_url(); ?>/help/"><i class="fa fa-bell"></i> <?php // _e( 'Help', 'dokan' ); ?></a>
+                                           <?php /*?> <?php
+                                                wp_nav_menu( array(
+                                                    'theme_location'    => 'primary',
+                                                    'container'         => 'div',
+                                                    'container_class'   => 'collapse navbar-collapse navbar-main-collapse',
+                                                    'menu_class'        => 'nav navbar-nav',
+                                                    'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+                                                    'walker'            => new wp_bootstrap_navwalker())
+                                                );
+                                            ?><?php */?>
+                                        </div>
+                                      </div>
+                                    </nav>-->
                             </nav><!-- .site-navigation .main-navigation -->
                         </div><!-- .span12 -->
                     </div><!-- .row -->

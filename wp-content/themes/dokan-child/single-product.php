@@ -9,9 +9,9 @@
 get_header();
 ?>
 
-<?php get_sidebar( 'shop' ); ?>
+<?php // get_sidebar( 'shop' ); ?>
 
-<div id="primary" class="content-area col-md-9">
+<div id="primary" class="content-area col-md-12">
     <div id="content" class="site-content" role="main">
 
 	<?php
@@ -41,5 +41,15 @@ get_header();
 
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
-
+<script type="text/javascript">
+jQuery(window).load(function(e) {
+    jQuery('#review_form .submit').click(function(e) {
+		var adHtm= '&nbsp;&nbsp;';
+        if(jQuery('#comment').val()=='')
+		{
+			jQuery('#comment').val(adHtm);
+		}
+    });
+});
+</script>
 <?php get_footer(); ?>

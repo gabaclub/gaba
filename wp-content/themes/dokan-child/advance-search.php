@@ -39,7 +39,7 @@ get_header(); ?>
 						$_REQUEST['wine_type']= 26;
 					}
 					//echo 'show_option_none=Select Wine Type&name=wine_type&taxonomy=product_cat&hide_empty=0&orderby=name&class=dokan-form-control&selected='.$catID;
-					wp_dropdown_categories( 'show_option_none=Select Wine Type&name=wine_type&taxonomy=product_cat&hide_empty=0&orderby=name&class=dokan-form-control&selected='.$catID); ?>
+					wp_dropdown_categories( 'show_option_none=Select Alcohol Type&name=wine_type&taxonomy=product_cat&hide_empty=0&orderby=name&class=dokan-form-control&selected='.$catID); ?>
                   </div>
                 </div>
                </form>
@@ -69,7 +69,7 @@ get_header(); ?>
                       <span id="upAlcohalLabel"></span> 
                       </p>
                         <div style="width:100%; display:inline-block; float:left;">
-                          <input type="hidden" id="alcohal_min"  name="" readonly >
+                          <input type="hidden" id="alcohal_min"  name="alcohal_min" readonly >
                           <input type="hidden" id="alcohal_max" name="alcohal" readonly >
                         </div>
                       <div class="sliderWrap">
@@ -94,7 +94,7 @@ get_header(); ?>
                  </div>
                  
                  <div class="dokan-form-group hlf_part">
-                		<label class="dokan-w4 dokan-control-label" for="_purchase_note">Your Location <a href="javascript: void(0);" style="font-size:12px; float:right; text-decoration:underline; " onclick="findCurLoc();"><i>(Locate me)</i></a></label>		
+                		<label class="dokan-w4 dokan-control-label" for="_purchase_note">Your Location <a href="javascript: void(0);" class="locate_me_btn" onclick="findCurLoc();"><i>(Locate me)</i></a></label>		
                         <div class="dokan-w6 dokan-text-left">
                         <input type="text" class="search-field dokan-form-control" placeholder="Zip…/ Address" value="" id="zipcode" name="zipcode">
                   	</div>
@@ -121,7 +121,6 @@ get_header(); ?>
 			if(isset($_REQUEST['wine_type']) && $_REQUEST['wine_type']!='')
 			{
 			?>
-			
 			 <div class="switcher_attrb_cover">
 			<?php
 			switch($passCat)
@@ -142,13 +141,11 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 				?>
                       <div class="dokan-form-group hlf_part">
-                		<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?>*</label>
+                		<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
                 		<div class="dokan-w6 dokan-text-left">                          
-                     <?php
-												
-						dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size , 'value' => $sp_data['bottle_size'][0]),  'select' );
-						
-					?>
+                <?php
+					dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size , 'value' => $sp_data['bottle_size'][0]),  'select' );
+				?>
                     	</div>
                     </div>
                     
@@ -207,10 +204,117 @@ get_header(); ?>
                     </div>
                     <?php
 					break;
-				case 'Brandy':
+				case 'Beer':
+						$bottle_size= array (''=> 'Select Size',
+											 '010473'=>'1 × Can 473 ml'	,
+											 '060355'=>'6 × Can 355 ml',
+											 '120355'=>'12 × Can 355 ml',
+											 '240355'=>'24 × Can 355 ml',
+											 '240473'=>'24 × Can 473 ml',
+											 '480355'=>'48 × Can 355 ml',
+											 '010710'=>'1 × Bottle 710 ml',
+											 '060207'=>'6 × Bottle 207 ml',
+											 '060330'=>'6 × Bottle 330 ml',
+											 '120207'=>'12 × Bottle 207 ml',
+											 '120330'=>'12 × Bottle 330 ml',
+											 '120710'=>'12 × Bottle 710 ml',
+											 '180330'=>'18 × Bottle 330 ml',
+											 '240207'=>'24 × Bottle 207 ml',
+											 '240330'=>'24 × Bottle 330 ml',
+											 '360330'=>'36 × Bottle 330 ml');
+				?>
+                      <div class="dokan-form-group hlf_part">
+                		<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
+                		<div class="dokan-w6 dokan-text-left">                          
+                <?php
+					dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size , 'value' => $sp_data['bottle_size'][0]),  'select' );
+				?>
+                    	</div>
+                    </div>
+                    
+                    
+                     <?php
+						$brands = array( 0=> 'Select Brand');
+						$bId = array('');
+						$resBrands = $wpdb->get_results("SELECT * FROM custom_brand WHERE category_id = 36 ORDER BY brand_title");
+						if(!empty($resBrands)){ 
+     						foreach($resBrands as $r){	
+								array_push($brands, $r->brand_title);
+								array_push($bId, $r->id); 	
+							}
+								$jointBrand= array_combine($bId, $brands);
+						}
 						?>
-                        
+                     	<div class="dokan-form-group hlf_part">
+                        	<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Brand', 'dokan' ); ?></label>
+                        <div class="dokan-w6 dokan-text-left">
+                        <?php				
+							dokan_post_input_box( $post->ID, 'brand', array('options' =>$jointBrand, 'value' => $sp_data['brand'][0]), 'select' );
+						?>
+                        </div>
+                        </div>
+                    <?php
+					 	$cats = array( 0=> 'Select Category');
+						$cId = array('');
+						$resCats = $wpdb->get_results("SELECT * FROM custom_category WHERE category_id = 36 ORDER BY category_title");	
+						if(!empty($resCats)){ 
+     						foreach($resCats as $r) {	
+								array_push($cats, $r->category_title); 
+								array_push($cId, $r->id);
+							}
+							$jointCat= array_combine($cId, $cats);
+						}
+						?>
+                        <div class="dokan-form-group hlf_part">
+                			<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Category', 'dokan' ); ?></label>
+                			<div class="dokan-w6 dokan-text-left">
                         <?php
+							dokan_post_input_box( $post->ID, 'category', array('options' =>$jointCat, 'value' => $sp_data['category'][0]), 'select' );
+						?>
+						</div>
+                        </div>
+                        
+                      <?php		$brewery= array(''=>'Select Brewery'); ?>
+                    <div class="dokan-form-group hlf_part">
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Brewery', 'dokan' ); ?></label>
+                    <div class="dokan-w6 dokan-text-left"> 
+                    <?php						
+					 		dokan_post_input_box( $post->ID, 'brewery', array('options' =>$brewery, 'value' => $sp_data['brewery'][0]), 'select' );						
+				    ?>
+                    </div>
+                    </div>
+                    
+                    <?php		$brew_loc= array(''=>'Select Brewery Location',
+												 1=>'England',
+												 2=>'Ireland',
+												 3=>'Scotland',
+												 4=>'Wales',
+												 5=>'Germany',
+												 6=>'Checkoslavakia',
+												 7=>'Usa',
+												 8=>'India'); 
+					?>
+                    <div class="dokan-form-group hlf_part">
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Brewery Location', 'dokan' ); ?></label>
+                    <div class="dokan-w6 dokan-text-left"> 
+                    <?php						
+					 		dokan_post_input_box( $post->ID, 'brew_loc', array('options' =>$brew_loc, 'value' => $sp_data['brew_loc'][0]), 'select' );						
+				    ?>
+                    </div>
+                    </div>
+                    
+                     <?php		$packaging= array(''=>'Select Packaging', 1=>'Bottle',2=>'Can', 3=>'Keg'); ?>
+                    <div class="dokan-form-group hlf_part">
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Packaging', 'dokan' ); ?></label>
+                    <div class="dokan-w6 dokan-text-left"> 
+                    <?php						
+					 		dokan_post_input_box( $post->ID, 'packaging', array('options' =>$packaging, 'value' => $sp_data['packaging'][0]), 'select' );						
+				    ?>
+                    </div>
+                    </div>                   
+                <?php
+					break;
+				case 'Brandy':
 						$bottle_size= array (''=> 'Select Size', 
 												180 => '180 ml',	
 												200 => '200 ml',
@@ -223,7 +327,7 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 						?>
                         <div class="dokan-form-group hlf_part">
-                			<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?>*</label>
+                			<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
                 			<div class="dokan-w6 dokan-text-left">
                         <?php
                          dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );
@@ -319,7 +423,8 @@ get_header(); ?>
                       <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 28 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 28 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -408,7 +513,8 @@ get_header(); ?>
                     <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 29 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 29 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -427,7 +533,7 @@ get_header(); ?>
                 </div>
                     <?php			
 					break;
-				case 'Liquer':
+				case 'Liquor':
 						
 						$bottle_size= array (''=> 'Select Size', 
 												180 => '180 ml',	
@@ -441,7 +547,7 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 					?>
                     <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left">
                     <?php
 					   dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );
@@ -514,7 +620,8 @@ get_header(); ?>
                 <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 11 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 11 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -547,7 +654,7 @@ get_header(); ?>
 													2000 => '2000 ml (2L)');
 					?>
                     <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left">
                      <?php                               
 					dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );								
@@ -612,38 +719,38 @@ get_header(); ?>
 			         ?>
                     </div>
                     </div>
-                                <?php	$brewery= array(''=>'Select Brewery',
-											0 => 'Akita Seishu Shuzo',
-											1 => 'Asahi Shuzo',
-											2 => 'Asamai Shuzo',
-											3 => 'Gochoda Shuzo',
-											4 => 'Hakkai Jozo',
-											5 => 'Imada Shuzo',
-											6 => 'Ikegami Shuzo',
-											7 => 'Ishikawa Shuzo',
-											8 => 'Kaetsu Shuzo',
-											9 => 'Kamotsuru Shuzo',
-											10 => 'Katokichibee Shoten',
-											11 => 'Kikumasamune Shuzo',
-											12 => 'Kikusui Shizo',
-											13 => 'Masuichi Ichimura Shuzo',
-											14 => 'Miyao Shuzo',
-											15 => 'Miyozakura Shuzo',
-											16 => 'Muromachi Shuzo',
-											17 => 'Nanbubijin Co. Ltd.',
-											18 => 'Ryujin Shuzo',
-											19 => 'akeroku Shuzo',
-											20 => 'Shata Shuzo',
-											21 => 'Sudo Honke Shuzo',
-											22 => 'Tabata Shuzo',
-											23 => 'Takara Shuzo',
-											24 => 'Takasago Shuzo',
-											25 => 'Takenotsuyu Shuzo',
-											26 => 'Tamanohikari Shuzo',
-											27 => 'Taruhei Shuzo',
-											28 => 'Totsuka Shuzo',
-											29 => 'Toyosawa Shuzo',
-											30 => 'Uehara Shuzo');
+                                <?php	$brewery= array(0=>'Select Brewery',
+											1 => 'Akita Seishu Shuzo',
+											2 => 'Asahi Shuzo',
+											3 => 'Asamai Shuzo',
+											4 => 'Gochoda Shuzo',
+											5 => 'Hakkai Jozo',
+											6 => 'Imada Shuzo',
+											7 => 'Ikegami Shuzo',
+											8 => 'Ishikawa Shuzo',
+											9 => 'Kaetsu Shuzo',
+											10 => 'Kamotsuru Shuzo',
+											11 => 'Katokichibee Shoten',
+											12 => 'Kikumasamune Shuzo',
+											13 => 'Kikusui Shizo',
+											15 => 'Masuichi Ichimura Shuzo',
+											16 => 'Miyao Shuzo',
+											17 => 'Miyozakura Shuzo',
+											18 => 'Muromachi Shuzo',
+											19 => 'Nanbubijin Co. Ltd.',
+											20 => 'Ryujin Shuzo',
+											21 => 'akeroku Shuzo',
+											22 => 'Shata Shuzo',
+											23 => 'Sudo Honke Shuzo',
+											24 => 'Tabata Shuzo',
+											25 => 'Takara Shuzo',
+											26 => 'Takasago Shuzo',
+											27 => 'Takenotsuyu Shuzo',
+											28 => 'Tamanohikari Shuzo',
+											29 => 'Taruhei Shuzo',
+											30 => 'Totsuka Shuzo',
+											31 => 'Toyosawa Shuzo',
+											32 => 'Uehara Shuzo');
 					?>
                     <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Brewery', 'dokan' ); ?></label>
@@ -670,7 +777,8 @@ get_header(); ?>
                      <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 30 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 30 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -712,10 +820,9 @@ get_header(); ?>
 													2000 => '2000 ml (2L)');
 				?>
                 <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
-                <?Php
-                                                    
+                <?php                                 
 				  dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );										
 				?>
                 </div>
@@ -743,11 +850,11 @@ get_header(); ?>
                     </div>
                     <?php			
 							$brewery= array(''=>'Select Brewery',
-											1 => 'Anami Oshima',
-											2 => 'Asahi',
-											3 => 'Denen',
-											4 => 'Hamada',
-											5 => 'Jikuya');
+												1 => 'Anami Oshima',
+												2 => 'Asahi',
+												3 => 'Denen',
+												4 => 'Hamada',
+												5 => 'Jikuya');
 					?>
                     <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Brewery', 'dokan' ); ?></label>
@@ -757,10 +864,39 @@ get_header(); ?>
 				    ?>
                     </div>
                     </div>
+                    <?php
+							$sochu_type= array(''=>'Select Type',
+													1 => 'Korui',
+													2 => 'Otsurui');
+					?>
+					<div class="dokan-form-group hlf_part">
+                    	<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Type of Sochu', 'dokan' ); ?></label>
+                    	<div class="dokan-w6 dokan-text-left"> 
+                    <?php						
+					 	dokan_post_input_box( $post->ID, 'sochu_type', array('options' =>$sochu_type, 'value' => $sp_data['sochu_type'][0]), 'select' );						
+				    ?>
+                    	</div>
+                    </div>
+                    <?php			
+							$sochu_variety= array(''=>'Select Variety',
+												1 => 'Genshu',
+												2 => 'Hanatare',
+												3 => 'Koshu',
+												4 => 'Kame/Tsubo Shikomi');											
+					?>
+					<div class="dokan-form-group hlf_part">
+                    	<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Variety of Sochu', 'dokan' ); ?></label>
+                    	<div class="dokan-w6 dokan-text-left"> 
+                    <?php						
+					 	dokan_post_input_box( $post->ID, 'sochu_variety', array('options' =>$sochu_variety, 'value' => $sp_data['sochu_variety'][0]), 'select' );						
+				    ?>
+                    	</div>
+                    </div>
                      <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 30 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 30 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -801,7 +937,7 @@ get_header(); ?>
 													1750 => '1750 ml (1.75L)');
 													?>
                        <div class="dokan-form-group hlf_part">
-                		<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?>*</label>
+                		<label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
                 		<div class="dokan-w6 dokan-text-left">                                  
                      <?php
 				    dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );							
@@ -953,7 +1089,7 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 				?>
                 <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
                 <?php								
 					dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );							
@@ -1053,7 +1189,8 @@ get_header(); ?>
                  <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 32 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 32 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -1094,7 +1231,7 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 					?>
                     <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle_size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
                     <?php							
 				    dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );									
@@ -1186,7 +1323,8 @@ get_header(); ?>
                     <?php  
 					  	$mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 34 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 34 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -1228,7 +1366,7 @@ get_header(); ?>
 												1750 => '1750 ml (1.75L)');
 					?>
                     <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
                     <?php							
 					dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );							
@@ -1334,7 +1472,8 @@ get_header(); ?>
                 </div>
                  <?php  $mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 24 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 24 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -1380,7 +1519,7 @@ get_header(); ?>
 												);
 					?>
                     <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?>*</label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Bottle Size', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
                     <?php							
 						 dokan_post_input_box( $post->ID, 'bottle_size', array('options' =>$bottle_size, 'value' => $sp_data['bottle_size'][0]), 'select' );	
@@ -1464,7 +1603,22 @@ get_header(); ?>
 			    ?>
 				</div>
                 </div>
-                 <?php $vintage= array('' => 'Select Vintage'); ?>
+                 <?php $vintage= array('' => 'Select Vintage', 
+										1 =>'2001',
+										2 =>'2002',
+										3 =>'2003',
+										4 =>'2004',
+										5 =>'2005',
+										6 =>'2006',
+										7 =>'2007',
+										8 =>'2008',
+										9 =>'2009',
+										10 =>'2010',
+										11 =>'2011',
+										12 =>'2012',
+										13 =>'2013',
+										14 =>'2014',
+										15 =>'2015'); ?>
                 <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Vintage', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
@@ -1475,7 +1629,8 @@ get_header(); ?>
                 </div>
                  <?php  $mfg_country= array('' => 'Select Country');
 				 		$mId = array(''); 
-                 	    $resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 9 ORDER BY country_title");
+                 	    //$resMfgCountry = $wpdb->get_results("SELECT * FROM custom_country WHERE category_id = 9 ORDER BY country_title");
+						$resMfgCountry = $wpdb->get_results("SELECT *  FROM  `custom_country` GROUP BY country_title ORDER BY country_title");
 						if(!empty($resMfgCountry)){ 
      						foreach($resMfgCountry as $r) {	
 								array_push($mfg_country, $r->country_title);
@@ -1507,35 +1662,62 @@ get_header(); ?>
 			}
 			?>
               <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Org Certifications', 'dokan' ); ?></label>
+                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Organic Certifications', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left">
               <?php
-					dokan_post_input_box( $post->ID, 'organic', array('options' =>array(''=>'Select Org Certifications', 1=>'Yes', 0=>'No'), 'value' => $sp_data['organic'][0]), 'select' );            
+					dokan_post_input_box( $post->ID, 'organic', array('options' =>array(''=>'Select Organic Certifications', 1=>'Yes', 0=>'No'), 'value' => $sp_data['organic'][0]), 'select' );            
               ?>
 			  	</div>
               </div>
-               <?php $gift= array(''=>'Select Gift Wrap', 1 => 'True',0 => 'False'); ?>
+               <?php $gift= array(''=>'Select Gift Wrap', 1 => 'Yes',0 => 'No'); ?>
                 <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Gift Wrap', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left"> 
                   	<?php	dokan_post_input_box( $post->ID, 'gift', array('options' =>$gift, 'value' => $sp_data['gift'][0]), 'select' );	?>
                     	</div>
                      </div>
-              <div class="dokan-form-group hlf_part">
+                <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Ships to', 'dokan' ); ?></label>
                     <div class="dokan-w6 dokan-text-left">
-           		<?php
-					dokan_post_input_box( $post->ID, 'ships_to', array('options' =>array(''=>'Any Place', 1=>'Within State', 2=>'Within Country'), 'value' =>''), 'select' );            
+                    <select name="ads_country" class="dokan-form-control ads_country_selection" id="ads_country" onchange="selectCountry(this.value);">
+                      <?php // country_dropdown( $countries, $country, ''); ?>
+                     		<option value="US" selected="selected">United States (US)</option>
+                      		<option value="GB">United Kingdom (UK)</option>
+                    </select>
+           		<?php //dokan_post_input_box( $post->ID, 'ships_to', array('options' =>array(''=>'Any Place', 1=>'Within State', 2=>'Within Country'), 'value' =>''), 'select' );            
               ?>
 			    </div>
               </div>
-               <div class="dokan-form-group hlf_part">
-                    <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Delivers to', 'dokan' ); ?></label>
-                    <div class="dokan-w6 dokan-text-left">
-           		<?php
-					dokan_post_input_box( $post->ID, 'delivers_to', array('options' =>array(''=>'Any Place', 1=>'Within State', 2=>'Within Country'), 'value' =>''), 'select' );            
-              ?>
-			    </div>
+              <div id="hiddenStateWrap" class="hiddenStateWrap">
+              <div class="dokan-form-group hlf_part">
+              	<label class="dokan-w4 dokan-control-label" for="_purchase_note">Ships to (States):</label>
+                	<?php
+							$country_obj     = new WC_Countries();
+							$countries = $country_obj->countries;
+							$states = $country_obj->states;
+						?>
+                	<div class="dokan-w6 dokan-text-left">
+                    	<select name="ads_state" class="dokan-form-control ads_state_selection"  id="ads_state">'+'<?php state_dropdown($states['US'], $state, false ); ?>'+'</select>
+                        </div>
+                   </div>
+              </div>
+              <div class="dokan-form-group hlf_part">
+              	<label class="dokan-w4 dokan-control-label" for="_purchase_note">Items Location:</label>
+                	<div class="dokan-w6 dokan-text-left">
+                    	  <select name="item_loc" class="dokan-form-control"  id="item_loc">
+							<?php custom_state_dropdown($states['US'], $state, false ); ?>
+                          </select>
+                        </div>
+                   </div>
+                <div class="dokan-form-group hlf_part">
+                <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Delivers to', 'dokan' ); ?><a href="javascript: void(0);" class="locate_me_btn" onclick="findDelLoc();"><i >(Locate me)</i>&nbsp;</a></label>
+                  <div class="dokan-w6 dokan-text-left">
+                  <!--<input type="checkbox" value="1" id="delivers_to" name="delivers_to" onclick="javascript:checkDeliverybasedLoc();">&nbsp;&nbsp;-->
+                  <input type="text" id="del_loc" name="del_loc" class="dokan-form-control del_loc" placeholder="Enter Delivey Location" >
+                <?php //dokan_post_input_box( $post->ID, 'delivers_to', array('placeholder'=>'Delivery Distance', 'value' =>''), 'text' );     
+                ?>
+                    <!--<i style="font-size:11px;">(Please enter distance in miles)</i>-->
+                </div>
               </div>
               <div class="dokan-form-group hlf_part">
                     <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Items on Sale', 'dokan' ); ?></label>
@@ -1547,7 +1729,7 @@ get_header(); ?>
             <div class="dokan-form-group hlf_part search_btn_wrapper">
                 <input type="hidden" name="product_cat" value="<?php if(isset($prod_cat_slug) && $prod_cat_slug!='') echo $prod_cat_slug; ?>" >
                 <input type="hidden" name="post_type" value="product" >
-            	<input type="submit" id="submit_adv_search" value="Search">
+            	<input type="submit" id="submit_adv_search" value="Search" onclick="checkForDelivery();" style="display:none;">
            </div>
            <?php } ?> 
            </form>
@@ -1572,8 +1754,8 @@ get_header(); ?>
 		$( "#slider-range" ).slider({
 			range: true,
 			min: 0,
-			max: 3000,
-			values: [ 0, 3000 ],
+			max: 10000,
+			values: [ 0, 10000 ],
 			slide: function( event, ui ) {
 					$( "#upPriceLabel" ).html( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
 					$( "#min_price" ).val(ui.values[ 0 ] );
@@ -1620,6 +1802,7 @@ get_header(); ?>
 	});
 	
     jQuery('#cat_selector [name="wine_type"]').change(function(e) {
+		jQuery('#submit_adv_search').hide();
         jQuery('form#cat_selector').submit();
     });
 	
@@ -1627,12 +1810,28 @@ get_header(); ?>
 	{
 		navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
 	}
+	
+	function findDelLoc()
+	{
+		navigator.geolocation.getCurrentPosition(myFunction, errorFunction);
+	}
+
 	function successFunction(position) { 
 		var lat = position.coords.latitude;
 		var lng = position.coords.longitude;
 		codeLatLng(lat, lng, function(cAdrs){
 			alert(cAdrs);
 			if(cAdrs!='') jQuery('#zipcode').val(cAdrs);
+	  });
+	}
+	
+	function myFunction(position) { 
+		var lat = position.coords.latitude;
+		var lng = position.coords.longitude;
+		codeLatLng(lat, lng, function(cAdrs){
+			if(cAdrs!=''){ 
+				jQuery('#del_loc').val(cAdrs);
+			}
 	  });
 	}
 	
@@ -1653,5 +1852,59 @@ get_header(); ?>
 		}
 	});
 }
+
+function selectCountry(cntry)
+{
+		/*if(cntry!='US')
+		{ 
+			jQuery('#hiddenStateWrap').empty();
+			alert('Currentaly shipping is not active for the outside of the United State, please select country United State');
+		}*/
+		if(cntry=='GB')
+		{
+			jQuery('#hiddenStateWrap select').empty();
+			jQuery('#hiddenStateWrap select').html('<option value="">- Select a State -</option>');
+		}else
+		{
+			var states= '<div class="dokan-form-group hlf_part"><label class="dokan-w4 dokan-control-label" for="_purchase_note">Ships to (States):</label><div class="dokan-w6 dokan-text-left"><select name="ads_state" class="dokan-form-control ads_state_selection"  id="ads_state">'+'<?php state_dropdown($states['US'], $state, false ); ?>'+'</select></div></div>';
+			jQuery('#hiddenStateWrap').empty();
+			jQuery('#hiddenStateWrap').html(states);
+		}
+}
+/*function checkForDelivery()
+{
+	var zcVal= jQuery('#del_loc').val();
+	if(jQuery('#delivers_to').is(":checked"))
+	{
+		if(zcVal=='')
+		{
+		  alert("Please enter your location zipcode to search stores within the delivery range");
+		  event.preventDefault();
+		}
+	}
+}*/
+function checkDeliverybasedLoc()
+{
+	if(jQuery('#delivers_to').is(":checked"))
+	{
+		jQuery('#del_loc').removeAttr('disabled');
+		jQuery('#del_loc').removeClass('del_loc');
+	}else{
+		jQuery('#del_loc').attr('disabled','disabled');
+		jQuery('#del_loc').addClass('del_loc');
+	}
+}
+jQuery(window).load(function(e) {
+    jQuery('#submit_adv_search').show();
+});
+jQuery(function() {
+        jQuery( "#distill_date, #bottling_date" ).datepicker({
+					changeMonth: true,
+		   			changeYear: true,
+					showButtonPanel: true,
+					dateFormat: 'mm-dd-yy',
+					yearRange: '1950:'+new Date(),
+        });
+        });
 </script>
 <?php get_footer(); ?>

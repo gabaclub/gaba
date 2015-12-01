@@ -503,77 +503,113 @@ function dokan_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
 	
-	if ( isset( $_POST['flavour'] ) )
-		update_post_meta( $post_id, 'flavour', stripslashes( $_POST['flavour'] ) );
+	if ( isset( $_POST['aging'] ) )
+		update_post_meta( $post_id, 'aging', stripslashes( $_POST['aging'] ) ); 
+	
+	if ( isset( $_POST['alcohal'] ) )
+		update_post_meta( $post_id, 'alcohal', stripslashes( $_POST['alcohal'] ) );
 		
+	if ( isset( $_POST['appellation'] ) )
+		update_post_meta( $post_id, 'appellation', stripslashes( $_POST['appellation'] ) );
+		
+	if ( isset( $_POST['attribute'] ) )
+		update_post_meta( $post_id, 'attribute', stripslashes( $_POST['attribute'] ) );	
+		
+	if(isset($_POST['base'] ) )
+	   update_post_meta( $post_id, 'base', stripslashes( $_POST['base'] ) );
+	
 	if ( isset( $_POST['bottle_size'] ) )
 		update_post_meta( $post_id, 'bottle_size', stripslashes( $_POST['bottle_size'] ) );	
+		
+	if ( isset( $_POST['bottler'] ) )
+		update_post_meta( $post_id, 'bottler', stripslashes( $_POST['bottler'] ) );
+		
+	if ( isset( $_POST['bottling_date'] ) )
+		update_post_meta( $post_id, 'bottling_date', stripslashes( $_POST['bottling_date'] ) );
 	
 	if ( isset( $_POST['brand'] ) )
-		update_post_meta( $post_id, 'brand', stripslashes( $_POST['brand'] ) );	
+		update_post_meta( $post_id, 'brand', stripslashes( $_POST['brand'] ) );
+		
+	if ( isset( $_POST['brewery'] ) )
+		update_post_meta( $post_id, 'brewery', stripslashes( $_POST['brewery'] ) );
 	
-	if ( isset( $_POST['distillery'] ) )
-		update_post_meta( $post_id, 'distillery', stripslashes( $_POST['distillery'] ) );	
-		
-	if ( isset( $_POST['alcohal'] ) )
-		update_post_meta( $post_id, 'alcohal', stripslashes( $_POST['alcohal'] ) );	
-		
-	if ( isset( $_POST['product_rating'] ) )
-		update_post_meta( $post_id, 'product_rating', stripslashes( $_POST['product_rating'] ) );		
+	if ( isset( $_POST['brew_loc'] ) )
+		update_post_meta( $post_id, 'brew_loc', stripslashes( $_POST['brew_loc'] ) );
+	
+	if ( isset( $_POST['brew_method'] ) )
+		update_post_meta( $post_id, 'brew_method', stripslashes( $_POST['brew_method'] ) ); 				
 		
 	if ( isset( $_POST['category'] ) )
 		update_post_meta( $post_id, 'category', stripslashes( $_POST['category'] ) );		
 		
-	if ( isset( $_POST['organic'] ) )
-		update_post_meta( $post_id, 'organic', stripslashes( $_POST['organic'] ) );	
-		
 	if ( isset( $_POST['cooking'] ) )
-		update_post_meta( $post_id, 'cooking', stripslashes( $_POST['cooking'] ) );	
+		update_post_meta( $post_id, 'cooking', stripslashes( $_POST['cooking'] ) );
+		
+	if ( isset( $_POST['distilation'] ) )
+		update_post_meta( $post_id, 'distilation', stripslashes( $_POST['distilation'] ) );
 	
-	if(isset($_POST['base'] ) )
-	   update_post_meta( $post_id, 'base', stripslashes( $_POST['base'] ) );	
-	  
+	if ( isset( $_POST['distillery'] ) )
+		update_post_meta( $post_id, 'distillery', stripslashes( $_POST['distillery'] ) );
+	
+	if ( isset( $_POST['distMethod'] ) )
+		update_post_meta( $post_id, 'distMethod', stripslashes( $_POST['distMethod'] ) );
+		
 	if ( isset( $_POST['distill_No'] ) )
-		update_post_meta( $post_id, 'distill_No', stripslashes( $_POST['distill_No'] ) ); 
+		update_post_meta( $post_id, 'distill_No', stripslashes( $_POST['distill_No'] ) );
+		
+	if ( isset( $_POST['distill'] ) )
+		update_post_meta( $post_id, 'distill', stripslashes( $_POST['distill'] ) );	
+		
+	if ( isset( $_POST['distill_date'] ) )
+		update_post_meta( $post_id, 'distill_date', stripslashes( $_POST['distill_date'] ) );	 
+	
+	if ( isset( $_POST['flavour'] ) )
+		update_post_meta( $post_id, 'flavour', stripslashes( $_POST['flavour'] ) );
 	
 	if ( isset( $_POST['fruit'] ) )
 		update_post_meta( $post_id, 'fruit', stripslashes( $_POST['fruit'] ) ); 
 		
 	if ( isset( $_POST['gift'] ) )
 		update_post_meta( $post_id, 'gift', stripslashes( $_POST['gift'] ) ); 
-	
-	if ( isset( $_POST['brewery'] ) )
-		update_post_meta( $post_id, 'brewery', stripslashes( $_POST['brewery'] ) ); 
-		
-	if ( isset( $_POST['brew_method'] ) )
-		update_post_meta( $post_id, 'brew_method', stripslashes( $_POST['brew_method'] ) ); 
 		
 	if ( isset( $_POST['grade'] ) )
-		update_post_meta( $post_id, 'grade', stripslashes( $_POST['grade'] ) ); 
+		update_post_meta( $post_id, 'grade', stripslashes( $_POST['grade']));
 		
-	if ( isset( $_POST['aging'] ) )
-		update_post_meta( $post_id, 'aging', stripslashes( $_POST['aging'] ) ); 
+	if ( isset( $_POST['mfg_country'] ) )
+		update_post_meta( $post_id, 'mfg_country', stripslashes( $_POST['mfg_country'] ) );
 		
-	if ( isset( $_POST['distilation'] ) )
-		update_post_meta( $post_id, 'distilation', stripslashes( $_POST['distilation'] ) );
+	if ( isset( $_POST['mfg_region'] ) )
+		update_post_meta( $post_id, 'mfg_region', stripslashes( $_POST['mfg_region'] ) );
 		
-	if ( isset( $_POST['distMethod'] ) )
-		update_post_meta( $post_id, 'distMethod', stripslashes( $_POST['distMethod'] ) );
+	if ( isset( $_POST['organic'] ) )
+		update_post_meta( $post_id, 'organic', stripslashes( $_POST['organic'] ) );	
+	
+	if ( isset( $_POST['packaging'] ) )
+		update_post_meta( $post_id, 'packaging', stripslashes( $_POST['packaging'] ) );	
+	
+	if ( isset( $_POST['product_rating'] ) )
+		update_post_meta( $post_id, 'product_rating', stripslashes( $_POST['product_rating'] ) );
+		
+	if ( isset( $_POST['sochu_type'] ) )
+		update_post_meta( $post_id, 'sochu_type', stripslashes( $_POST['sochu_type'] ) );
+		
+	if ( isset( $_POST['sochu_variety'] ) )
+		update_post_meta( $post_id, 'sochu_variety', stripslashes( $_POST['sochu_variety'] ) );	
 		
 	if ( isset( $_POST['variety'] ) )
-		update_post_meta( $post_id, 'variety', stripslashes( $_POST['variety'] ) );	
+		update_post_meta( $post_id, 'variety', stripslashes( $_POST['variety'] ) );
+	
+	if ( isset( $_POST['vintage'] ) )
+		update_post_meta( $post_id, 'vintage', stripslashes( $_POST['vintage'] ) );	
 		
 	if ( isset( $_POST['whiskyAge'] ) )
-		update_post_meta( $post_id, 'whiskyAge', stripslashes( $_POST['whiskyAge'] ) );	
+		update_post_meta( $post_id, 'whiskyAge', stripslashes( $_POST['whiskyAge'] ) );
 		
-	if ( isset( $_POST['distill_date'] ) )
-		update_post_meta( $post_id, 'distill_date', stripslashes( $_POST['distill_date'] ) );	
+	if ( isset( $_POST['winery'] ) )
+		update_post_meta( $post_id, 'winery', stripslashes( $_POST['winery'] ) );
 		
-	if ( isset( $_POST['bottling_date'] ) )
-		update_post_meta( $post_id, 'bottling_date', stripslashes( $_POST['bottling_date'] ) );
-		
-	if ( isset( $_POST['distill'] ) )
-		update_post_meta( $post_id, 'distill', stripslashes( $_POST['distill'] ) );												
+	if ( isset( $_POST['winyard'] ) )
+		update_post_meta( $post_id, 'winyard', stripslashes( $_POST['winyard'] ) );														
 			
     // Dimensions
     if ( $is_virtual == 'no' ) {
@@ -1958,29 +1994,43 @@ function prefix_ajax_dokan_custom_specification() {
 	
 	if(isset($dataSpec[0]) && $dataSpec[0]!=$dataSpec[1])
 	{
-			$tab_mixed = array( 'bottle_size',
-								'brand',
-								'distillery',
+			$tab_mixed = array( 'aging',
 								'alcohal',
-								'rating',
+								'appellation',
+								'attribute',
+								'base',
+								'bottle_size',
+								'bottler',
+								'bottling_date',
+								'brand',
+								'brewery',
+								'brew_loc',
+								'brew_method',
 								'category',
-								'flavour',
-								'organic',
 								'cooking',
 								'distilation',
+								'distillery',
 								'distMethod',
 								'distill_No',
-								'aging',
-								'base',
-								'variety',
+								'distill',
+								'distill_date',
+								'flavour',
+								'fruit',
 								'gift',
 								'grade',
-								'brewery',
-								'brew_method',
+								'mfg_country',
+								'mfg_region',
+								'organic',
+								'packaging',
+								'product_rating',
+								'rating',
+								'sochu_type',
+								'sochu_variety',
+								'variety',
+								'vintage',
 								'whiskyAge',
-								'distill_date',
-								'bottling_date',
-								'product_rating');
+								'winery',
+								'winyard');
 								
 			foreach($tab_mixed as $tk)
 			{

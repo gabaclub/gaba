@@ -26,16 +26,7 @@ add_action( 'pre_get_posts', 'rc_modify_query_get_posts_by_date' );
 function rc_modify_query_get_posts_by_date( $query ) {
 
 global $wpdb;
-
-	// Check if on frontend and main query is modified
-
-	/*if( ! is_admin() && $query->is_main_query() ) {
-
-        $query->set( 'order', 'ASC' );
-
-        add_filter( 'posts_where', 'rc_filter_where' );
-
-    }*/      
+   
 	  	if( ! is_admin() && is_search() ) 
 	  	{
 
@@ -43,7 +34,6 @@ global $wpdb;
 			$metaQry= array();
 			$querystr = "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'dokan_profile_settings'";
 			$result = $wpdb->get_results($querystr, OBJECT);
-			//$result=$wpdb->get_results("SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'billing_postcode' and meta_value='".$_REQUEST['zipcode']."'" );
 			foreach ( $result as $user )
 			{
 			   $authors[]= $user->user_id;
@@ -69,34 +59,108 @@ global $wpdb;
                               );
 			}*/
 			/*********************************** Filtering for discounted Items Search ********************************/
-			if(isset($_REQUEST['discount']) && $_REQUEST['discount']==true)
+			if(isset($_REQUEST['FLAG']) && $_REQUEST['FLAG']=='QUICK_SEARCH')
 			{
-							$metaQry[] =	array( // Simple products type
-															'key' => '_sale_price',
-															'value' => 0,
-															'compare' => '>',
-															'type' => 'numeric'
-												);
-							$metaQry[] =	array( // Variable products type
-														'key' => '_min_variation_sale_price',
-														'value' => 0,
-														'compare' => '>',
-														'type' => 'numeric'
-                              					);
+					if(isset($_REQUEST['discount']) && $_REQUEST['discount']==true)
+					{
+									$metaQry[] =	array( // Simple products type
+																	'key' => '_sale_price',
+																	'value' => 0,
+																	'compare' => '>',
+																	'type' => 'numeric'
+														);
+									$metaQry[] =	array( // Variable products type
+																'key' => '_min_variation_sale_price',
+																'value' => 0,
+																'compare' => '>',
+																'type' => 'numeric'
+														);
+					}else{
+									$metaQry[] =	array( // Simple products type
+																	'key' => '_sale_price',
+																	'value' => 0,
+																	'compare' => '=',
+																	'type' => 'numeric'
+														);
+									$metaQry[] =	array( // Simple products type
+																	'key' => '_min_variation_sale_price',
+																	'compare' => 'NOT EXISTS',
+														);
+					}
+			}else{
+					if(isset($_REQUEST['discount']) && $_REQUEST['discount']==true)
+					{
+									$metaQry[] =	array( // Simple products type
+																	'key' => '_sale_price',
+																	'value' => 0,
+																	'compare' => '>',
+																	'type' => 'numeric'
+														);
+									$metaQry[] =	array( // Variable products type
+																'key' => '_min_variation_sale_price',
+																'value' => 0,
+																'compare' => '>',
+																'type' => 'numeric'
+														);
+					}
 			}
 			/************************************* Filtering for zipcode Search ********************************/
-			if((isset($_REQUEST['zipcode']) && $_REQUEST['zipcode']!='') && (isset($_REQUEST['radius']) && $calDist<= $_REQUEST['radius']))
+			if((isset($_REQUEST['zipcode']) && $_REQUEST['zipcode']!='') && (isset($_REQUEST['radius']) && $calDist<= $_REQUEST['radius']) && (!isset($_REQUEST['delivers_to']) || $_REQUEST['delivers_to']=='') && (!isset($_REQUEST['item_loc']) || $_REQUEST['item_loc']==''))
 			{	
-						//print_r($authors).'<br>';
-						//print_r($sellerExist);
-						//echo "found:";
 						if(empty($sellerExist))
 						{
-							$query->set( 'author__in', array(-1) );
+							$query->set( 'author__in', array(-10) );
 						}else{
 							$query->set( 'author__in', $sellerExist);
 						}
-			}else{
+			}else if((isset($_REQUEST['ads_state']) && $_REQUEST['ads_state']!='') && (!isset($_REQUEST['delivers_to']) || $_REQUEST['delivers_to']=='') && (!isset($_REQUEST['item_loc']) || $_REQUEST['item_loc']==''))
+			{	
+
+						$sellerShips= checkForShippingState($authors);
+						if(empty($sellerShips))
+						{
+							 $query->set( 'author__in', array(-10));
+						}else{
+							 $query->set( 'author__in', $sellerShips);
+						}
+			}else if((isset($_REQUEST['del_loc']) && $_REQUEST['del_loc']!='') && (!isset($_REQUEST['ads_state']) || $_REQUEST['ads_state']=='') && (!isset($_REQUEST['item_loc']) || $_REQUEST['item_loc']==''))
+			{	
+						$pLatLong= getLnt($_REQUEST['del_loc']);
+						$sellerDelDist=  getDeliveryDistanceSeller($authors, $pLatLong);
+						//print_r($sellerDelDist);
+						//exit;
+						if(empty($sellerDelDist))
+						{
+							$query->set( 'author__in', array(-10) );
+						}else{
+							$query->set( 'author__in', $sellerDelDist);
+						}
+			}elseif((isset($_REQUEST['del_loc']) && $_REQUEST['del_loc']!='') && (isset($_REQUEST['ads_state']) && $_REQUEST['ads_state']!='') && (!isset($_REQUEST['item_loc']) || $_REQUEST['item_loc']==''))
+			{
+						$pLatLong= (isset($_REQUEST['del_loc']) && $_REQUEST['del_loc']!='')?getLnt($_REQUEST['del_loc']):'';
+						$sellerShips= checkForShippingState($authors);
+						$sellerDelDist=  getDeliveryDistanceSeller($authors, $pLatLong);
+						$combArr= array_merge($sellerShips, $sellerDelDist);
+						if(empty($combArr))
+						{
+							$query->set( 'author__in', array(-10) );
+						}else{
+							$query->set( 'author__in', $combArr);
+						}
+			}elseif(isset($_REQUEST['item_loc']) && $_REQUEST['item_loc']!='')
+			{
+						$itemsLocation= checkForItemLocation($authors, $_REQUEST['item_loc']);
+						//print_r($itemsLocation);
+						//exit;
+						if(empty($itemsLocation))
+						{
+								
+							$query->set( 'author__in', array(-10));
+						}else{
+							$query->set( 'author__in', $itemsLocation);
+						}
+			}
+			else{
 						$query->set( 'author__in', $authors);
 			}
 			/***************************** Filtering for Bottle Size Search ********************************/
@@ -133,7 +197,7 @@ global $wpdb;
 					$metaQry[] = array( // Simple products type
 												'key' => 'rating',
 												'value' => $_REQUEST['rating_min'],
-												'compare' => '>',
+												'compare' => '>=',
 												'type' => 'numeric'
 										);
 					$metaQry[] = array( // Simple products type
@@ -205,12 +269,39 @@ global $wpdb;
 													'type' => 'numeric'
 											);
 			}
+			/*********************************** Filtering for Sochu Type Search ********************************/
+			if((isset($_REQUEST['sochu_type']) && ($_REQUEST['sochu_type']!='' && $_REQUEST['sochu_type']!=0)))
+			{
+						$metaQry[] =	array( // Simple products type
+													'key' => 'sochu_type',
+													'value' => $_REQUEST['sochu_type'],
+													'type' => 'numeric'
+											);
+			}
+			/*********************************** Filtering for Sochu Variety Search ********************************/
+			if((isset($_REQUEST['sochu_variety']) && ($_REQUEST['sochu_variety']!='' && $_REQUEST['sochu_variety']!=0)))
+			{
+						$metaQry[] =	array( // Simple products type
+													'key' => 'sochu_variety',
+													'value' => $_REQUEST['sochu_variety'],
+													'type' => 'numeric'
+											);
+			}
 			/********************************* Filtering for Brewery Method Search ****************************/
 			if((isset($_REQUEST['brew_method']) && ($_REQUEST['brew_method']!='' && $_REQUEST['brew_method']!=0)))
 			{
 						$metaQry[] =   array( // Simple products type
 													'key' => 'brew_method',
 													'value' => $_REQUEST['brew_method'],
+													'type' => 'numeric'
+										);
+			}
+			/********************************* Filtering for Brewery Location Search ****************************/
+			if((isset($_REQUEST['brew_loc']) && ($_REQUEST['brew_loc']!='' && $_REQUEST['brew_loc']!=0)))
+			{
+						$metaQry[] =   array( // Simple products type
+													'key' => 'brew_loc',
+													'value' => $_REQUEST['brew_loc'],
 													'type' => 'numeric'
 										);
 			}
@@ -347,12 +438,30 @@ global $wpdb;
 														'type' => 'numeric'
 										);
 			}
-			/***************************** Filtering for Gift Wrap Search ************************************/
+			/***************************** Filtering for Organic Search ************************************/
 			if(isset($_REQUEST['organic']) && $_REQUEST['organic']!='')
 			{
 							$metaQry[] =   array( // Simple products type
 														'key' => 'organic',
 														'value' => $_REQUEST['organic'],
+														'type' => 'numeric'
+											);
+			}
+			/***************************** Filtering for Attribute Search ************************************/
+			if(isset($_REQUEST['attribute']) && $_REQUEST['attribute']!='')
+			{
+							$metaQry[] =   array( // Simple products type
+														'key' => 'attribute',
+														'value' => $_REQUEST['attribute'],
+														'type' => 'numeric'
+											);
+			}
+			/***************************** Filtering for Attribute Search ************************************/
+			if(isset($_REQUEST['packaging']) && $_REQUEST['packaging']!='')
+			{
+							$metaQry[] =   array( // Simple products type
+														'key' => 'packaging',
+														'value' => $_REQUEST['packaging'],
 														'type' => 'numeric'
 											);
 			}
@@ -392,28 +501,24 @@ global $wpdb;
 														'type' => 'numeric'
 										);
 			}
-			/***************************** Filtering for Shipping Location Search ************************************/
-			if(isset($_REQUEST['ships_to']) && $_REQUEST['ships_to']!='')
-			{
-							$metaQry[] =  array( // Simple products type
-														'key' => 'ships_to',
-														'value' => $_REQUEST['ships_to'],
-														'type' => 'char'
-											);
-			}
-			/***************************** Filtering for Delivery Location Search ************************************/
-			if(isset($_REQUEST['delivers_to']) && $_REQUEST['delivers_to']!='')
-			{
-							$metaQry[] =  array( // Simple products type
-														'key' => 'delivers_to',
-														'value' => $_REQUEST['delivers_to'],
-														'type' => 'char'
-											);
-			}
 			/***************************** Filtering for Alcohal amount Search ************************************/
-			if(isset($_REQUEST['alcohal']) && $_REQUEST['alcohal']!='')
+			if((isset($_REQUEST['alcohal']) && $_REQUEST['alcohal']!='') && (($_REQUEST['alcohal_min']==0) || ($_REQUEST['alcohal_min']=='')))
 			{
-							$metaQry[]= array( // Simple products type
+							$metaQry[]=	array( 'relation' => 'OR',
+												array( // Simple products type
+														'key' => 'alcohal',
+														'value' => $_REQUEST['alcohal'],
+														'compare' => '<=',
+														'type' => 'numeric'
+												),
+												array(
+													'key'     => 'alcohal',
+													'value'   => '',
+													'compare' => '='
+											));
+			}else if((isset($_REQUEST['alcohal']) && $_REQUEST['alcohal']!='') && (isset($_REQUEST['alcohal_min']) && $_REQUEST['alcohal_min']>0))
+			{
+				          $metaQry[]= array( // Simple products type
 														'key' => 'alcohal',
 														'value' => $_REQUEST['alcohal'],
 														'compare' => '<=',
@@ -421,10 +526,10 @@ global $wpdb;
 												);
 							$metaQry[]=	array( // Simple products type
 														'key' => 'alcohal',
-														'value' => '',
-														'compare' => 'NOT IN',
-														'type' => 'char'
-												);
+														'value' => $_REQUEST['alcohal_min'],
+														'compare' => '>=',
+														'type' => 'numeric'
+											);
 			}
 			/***********************************************************************************************/
 			$query->set( 'meta_query', array('relation' => 'AND', $metaQry ) );
@@ -473,8 +578,6 @@ function getAuthorIds($author){
 		$isSellerFeatured='';
 		foreach ($author as $user) {				 
 			$store_info = dokan_get_store_info($user);
-			//print('<pre>'.print_r($store_info,true).'</pre>');
-			//echo 'Ram';
 			$seller_enable = dokan_is_seller_enabled($user);
 			$isSellerFeatured = get_user_meta($user, 'dokan_feature_seller', true);
 			if ($seller_enable) {
@@ -492,7 +595,6 @@ function getAuthorIds($author){
 			}
 				
 				$calDist= distance($pll['lat'], $pll['lng'], $seller[$i]['lat'], $seller[$i]['long'], "M");
-				//echo 'Distance Found:'.$calDist.'<br>';
 				if((isset($_REQUEST['zipcode']) && $_REQUEST['zipcode']!='') && (isset($_REQUEST['radius']) && $calDist<= $_REQUEST['radius']))
 				{
 					  $sellerArr[]= $seller[$i]['id'];
@@ -500,7 +602,7 @@ function getAuthorIds($author){
 				{
 					  $sellerArr[]= $seller[$i]['id'];
 				}else{
-					  //$sellerArr[]= $seller[$i]['id'];  
+					 
 				}
 			$i++;
 		}
@@ -521,8 +623,6 @@ function getSellerInfo($sellerArr){
 		$seller = array();
 		foreach ($sellerArr as $user) {				 
 			$store_info = dokan_get_store_info($user);
-			//print('<pre>'.print_r($store_info,true).'</pre>');
-			//echo 'Ram';
 			$seller_enable = dokan_is_seller_enabled($user);
 			$isSellerFeatured = get_user_meta($user, 'dokan_feature_seller', true);
 			if ($seller_enable) {
@@ -570,9 +670,169 @@ function custom_woocommerce_page_title( $page_title ) {
 		}
 		 return $page_title;
 }
+/***************************************************************************************************************************/
+function getDeliveryDistanceSeller($sellerArr, $pLatLong){
+		$sellerByDelDist=array();
+		foreach ($sellerArr as $user) {
+			$delDist=0;				 
+			$store_info = dokan_get_store_info($user);
+			$seller_enable = dokan_is_seller_enabled($user);
+			$isSellerFeatured = get_user_meta($user, 'dokan_feature_seller', true);
+			$delDist = get_user_meta($user, '_dps_delivery_distance', true);
+			
+			$map_location = isset($store_info['location'])? esc_attr( $store_info['location'] ) : '';
+			$locations = explode( ',', $map_location );
+			$lat1 = (isset($locations[0]) && $locations[0]!='')? $locations[0] : 0;
+			$lon1 = isset($locations[1] ) ? $locations[1] : 0;
+			
+			$lat2=$lon2=0;
+			if(isset($_REQUEST['del_loc']) && $_REQUEST['del_loc']!='')
+			{
+				$lat2 = $pLatLong['lat'];
+				$lon2 = $pLatLong['lng'];
+				$schByDistance= distance($lat1, $lon1, $lat2, $lon2, '');
+			}				
+			if((isset($delDist) && $delDist>0) && (isset($schByDistance) && $schByDistance>0) && ($schByDistance<= $delDist))
+			{
+				   $sellerByDelDist[]= $user;
+			}
+		}
+		return $sellerByDelDist;
+}
+/***************************************************************************************************************************/
+function checkForShippingState($sellerArr){
 
+		$sellerByShip=array();
+		foreach ($sellerArr as $user) {			             
+            $dps_country_rates = get_user_meta( $user, '_dps_country_rates', true );
+            $dps_state_rates   = get_user_meta( $user, '_dps_state_rates', true ); 
+			
+			$dps_country = (isset( $dps_country_rates ) ) ? $dps_country_rates : array();
+            $dps_state = (isset( $dps_state_rates[$_REQUEST['ads_country']]))?$dps_state_rates[$_REQUEST['ads_country']]:array();
+			
+			if(empty($dps_state))
+			{
+				$errors[] = '<a href="%s">%s (No Stores Available to the Shipping Location)</a>';
+			}else{
+				if( array_key_exists( $_REQUEST['ads_country'], $dps_country ) ) 
+				{      
+						if( $dps_state) 
+						{
+								if( array_key_exists($_REQUEST['ads_state'], $dps_state ) ) {
+									$sellerByShip[]= $user;
+								} elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+									
+								}    
+						} 
+			  	}
+			}
+		}
+		return $sellerByShip;
+}
+/***************************************************************************************************************************/
+function checkForItemLocation($sellerArr, $searchedLoc){
+
+		$sellerByItemLoc=array();
+		foreach ($sellerArr as $user) {				 
+			$store_info = dokan_get_store_info($user);
+			$seller_enable = dokan_is_seller_enabled($user);
+			$isSellerFeatured = get_user_meta($user, 'dokan_feature_seller', true);
+			
+			if ($seller_enable) {				
+				if (strpos($store_info['address'],$searchedLoc)!== false)
+				{
+						$sellerByItemLoc[]= $user; 
+				} 
+			}				
+		}	
+		//print_r($sellerByItemLoc);
+		return $sellerByItemLoc;
+}
+/**************************************************************************************************************************/
 add_filter('dokan_woo_breadcrumb','custom_dokan_woo_breadcrumb');
 function custom_dokan_woo_breadcrumb( $args ) {
 		exit;
 }
+/************************************************************************************************************************************/
+//add_action( 'woocommerce_checkout_after_customer_details', 'wc_check_if_shipping_possible');
+add_action( 'woocommerce_after_checkout_validation', 'wc_check_if_shipping_possible');
+function wc_check_if_shipping_possible() {
+	global $woocommerce;
+	
+	$packages = WC()->shipping->get_packages();
+    $packages = reset( $packages );
+	
+
+	if ( !isset( $packages['contents'] ) ) {
+            return;
+     }
+	
+	$products = $packages['contents'];
+	$destination_country = isset( $packages['destination']['country'] ) ? $packages['destination']['country'] : '';
+	$destination_state = isset( $packages['destination']['state'] ) ? $packages['destination']['state'] : '';
+	
+	 	$errors = array();
+        foreach ( $products as $key => $product) 
+		{	
+            $seller_id = get_post_field( 'post_author', $product['product_id'] );
+
+            $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
+            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true ); 
+            
+            $has_found = false;
+            $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
+            $dps_state = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
+			
+			
+			
+			if(empty($dps_country) || empty($dps_state))
+			{
+				 $errors[] = sprintf( '<a href="%s">%s (This wine can not be ship to your location)</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ));
+			}
+			else{
+				if( array_key_exists( $destination_country, $dps_country ) ) 
+				{      
+					if( $dps_state ) 
+					{
+							if( array_key_exists( $destination_state, $dps_state ) ) {
+								$has_found = true;
+							} elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+								$has_found = true;
+							}    
+					} 
+					else 
+					{
+						$has_found = true;
+					}
+				} 
+				     if ( ! $has_found ) {
+                		$errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
+            		}
+			}                   
+        }
+	if (!empty($errors))
+	{
+		wc_add_notice( sprintf( __( '%s can not be shipped to your shipping location, Please remove it from the cart. <a href="'.site_url().'/cart/">View Cart</a>', 'woocommerce' ), 'The Following Product'), 'error' );
+
+			foreach ( $errors as $errcnt) 
+			{
+					wc_add_notice( sprintf( __( '&bull; %s', 'woocommerce' ), $errcnt), 'error' );
+			}
+	}
+}
+/**********************************************************************************************************************/
+/*add_action( 'woocommerce_after_shop_loop_item_title', 'wc_product_sold_count', 11 );
+function wc_product_sold_count() {
+global $product;
+$units_sold = get_post_meta( $product->id, 'total_sales', true );
+echo '' . sprintf( __( 'Units Sold: %s', 'woocommerce' ), $units_sold ) . '';
+}*/
+/********************************** Adding Date Picker for the advanced search field **********************************/
+/*add_action('wp_enqueue_scripts', 'add_e2_date_picker'); 
+function add_e2_date_picker(){
+//jQuery UI date picker file
+//wp_enqueue_script('jquery-ui-datepicker');
+//jQuery UI theme css file
+//wp_enqueue_style('e2b-admin-ui-css','http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/themes/base/jquery-ui.css',false,"1.9.0",false);
+}*/
 ?>

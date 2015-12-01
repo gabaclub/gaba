@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 h1,
 h2,
 h3 {
-  color: #222;
+  color: #ffffff;
 }
 h1 {
   font-size: 28px;
@@ -26,7 +26,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   line-height: 150%;
-  color: #444;
+  color: #ffffff;
   background: #000;
 	/*background-image: url('assets/images/marble3.jpg');*/
 	background-attachment: fixed;
@@ -666,16 +666,14 @@ a:hover {
   font-size: 1em;
 }
 .home .product-sliders li .item-bar {
-  background: white;
+  background:#000;
   display: block;
   width: 100%;
   padding: 5px 0px;
-  border-bottom: 1px solid #eee;
-  border-left: 1px solid #eee;
-  border-right: 1px solid #eee;
+  border:none;
 }
 .home .product-sliders li .item-bar .price {
-  padding: 0px 0 0 10px;
+  padding: 0px 0 0 15px;
   display: inline-block;
   margin: 0;
 }
@@ -1137,8 +1135,8 @@ a:hover {
 }
 .widget {
   margin-bottom: 25px;
-  background: #fff;
-  border: 1px solid #ededed;
+  background: #242424;
+  border: 1px solid #444444;
   padding: 10px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -1871,7 +1869,7 @@ ul.subsubsub li.active a {
   margin: 0;
   font-size: 1em;
 }
-.woocommerce ul.products li.product .item-bar,
+/*.woocommerce ul.products li.product .item-bar,
 .woocommerce-page ul.products li.product .item-bar {
   background: white;
   display: block;
@@ -1880,6 +1878,15 @@ ul.subsubsub li.active a {
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
+}*/
+
+.woocommerce ul.products li.product .item-bar,
+.woocommerce-page ul.products li.product .item-bar {
+  background: #000;
+  display: block;
+  width: 100%;
+  padding: 5px 0px;
+  border:none;
 }
 .woocommerce ul.products li.product .item-bar .price,
 .woocommerce-page ul.products li.product .item-bar .price {
@@ -2621,7 +2628,7 @@ span.error {
 }
 .home .product-sliders li h3 {
   padding: 5px 5px 5px 15px;
-  border-right: 1px solid #ffffff;
+  border-right: 1px solid #000;
 }
 .worldwide-sellers-store-locator.slider-container h2.slider-heading {
   border-left: none;
@@ -2700,10 +2707,10 @@ a.advanced {
     border: #1A1D4A solid 1px;
 }
 .home .slider-container h2.slider-heading {
-    border-left: 5px solid #444444 !important;
+    border-left: 5px solid #242424 !important;
 }
 .home .product-sliders .flex-direction-nav a {
-    background: #444444 !important;
+    background: #242424 !important;
 }
 .widget-area aside form .product{padding:10px;}
 /********************** Css Added on Aug 08, 2015*********************************************/
@@ -2783,3 +2790,7 @@ div#secondary_sidebar_home {
 }*/
 
  }
+
+.dokan-store-caption{
+min-height:275px;
+}

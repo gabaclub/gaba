@@ -34,7 +34,7 @@ $get_checkout_url = apply_filters( 'woocommerce_get_checkout_url', WC()->cart->g
 
 		<?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
-		<div class="col2-set" id="customer_details" style="display:none;">
+		<div class="col2-set" id="customer_details" >
 			<div class="col-1">
 				<?php  do_action( 'woocommerce_checkout_billing' ); ?>
 			</div>

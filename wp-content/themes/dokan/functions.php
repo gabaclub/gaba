@@ -244,9 +244,10 @@ function my_scripts_method() {
 /*** Returns Price Range for Products**/
 function wc_product_price_range() {
 		$all_prices=$price_range=array();
+		wp_reset_query();
 		$args = array(
 			'post_type' => 'product'
-			);
+			);	
 		$loop = new WP_Query( $args );
 		if ( $loop->have_posts() ) {
 			while ( $loop->have_posts() ) : $loop->the_post();
@@ -256,7 +257,7 @@ function wc_product_price_range() {
 
 if ( ! empty( $all_prices ) ) {
      //$price_range['max_price'] = max( $all_prices );
-	 $price_range['max_price'] = 3000;
+	 $price_range['max_price'] = 10000;
 	 $price_range['min_price'] = 0;
 	 //$price_range['min_price'] = min( $all_prices );
 } else {

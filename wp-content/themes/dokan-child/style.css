@@ -1,615 +1,2763 @@
 /*
+
 Theme Name: Dokan Theme Child
+
 Theme URI: http://simpleintelligentsystems.com/wp/themes/
+
 Description: Are you looking for an elegant, powerful, and incredibly versatile WordPress theme to set up a website? Take your online store, blog, or portfolio to the next level.
+
 Author: Ray Brown
+
 Author URI: http://simpleintelligentsystems.com
+
 Template: dokan
+
 Version:  1.0.0
+
 */
+
 @import url("../dokan/style.css");
+
 /******************************************************************************************/
+
 div#page {
+
 max-width: 1140px;
+
 margin: 0 auto;
+
 }
+
 .home .item-bar .item-button{ display:none !important;}
+
 .home .product-sliders li h3, .woocommerce ul.products li.product h3, .woocommerce-page ul.products li.product h3 {
+
     max-height: 40px;
+
     overflow: hidden;
+
     min-height: 40px;
+
     line-height: 16px;
+
 }
+
+
 
 .site-header, .navbar-top-area.navbar-inverse, .site-footer{ /*width:1140px; */ margin:0px auto;}
+
 .widget .widget-title {
-    border-left: 3px solid #7B7B7D !important;
+
+    border-left: 3px solid #242424 !important;
+
     }
 
+
+
 .woocommerce nav.woocommerce-pagination ul li span.current, .woocommerce-page nav.woocommerce-pagination ul li span.current, .woocommerce #content nav.woocommerce-pagination ul li span.current, .woocommerce-page #content nav.woocommerce-pagination ul li span.current, .woocommerce nav.woocommerce-pagination ul li a:hover, .woocommerce-page nav.woocommerce-pagination ul li a:hover, .woocommerce #content nav.woocommerce-pagination ul li a:hover, .woocommerce-page #content nav.woocommerce-pagination ul li a:hover, .woocommerce nav.woocommerce-pagination ul li a:focus, .woocommerce-page nav.woocommerce-pagination ul li a:focus, .woocommerce #content nav.woocommerce-pagination ul li a:focus, .woocommerce-page #content nav.woocommerce-pagination ul li a:focus {
+
     background: #7C7C7D !important;
+
 }
+
 span.item-button {
+
     display: none;
+
 }
+
+
 
 div#dokan-store-location {
+
     border-bottom: #000 solid 2px;
+
     border-top: #000 solid 2px;
+
 }
+
+
 
 span#upPriceLabel,
+
 span#upAlcohalLabel,
+
 span#upRatingLabel {
+
     font-size: 12px;
+
     line-height: 24px;
+
 	color: #78787B !important;
+
 	font-weight:bold; 
+
 	float:right;
+
 }
+
+
 
 .product.noPadding {
+
     float: right;
+
     margin-top: -53px;
+
 }
+
+
 
 /*****************************************26-08-2015***************************************************/
+
 div#secondary_sidebar_home {
-    padding: 0px;
+
+    padding-left: 0px;
+
 }
+
 .home div#primary {
+
     padding-right: 0;
+
 }
+
 .home-content-area.col-md-12 {
+
     padding: 0px;
+
 }
+
 /*div#secondary {
+
     padding: 0;
+
 }*/
 
+
+
 body.home div#secondary {
+
     padding: 0;
+
 }
+
 div#primary {
+
     padding-right: 0px;
+
 }
+
+
+
 
 
 /********************** CSS Added on Aug 13, 2015 by Veer *********************************************/
-/*.dokan-w4 {
-    width: 25%;
-    float: left;
-}
-.dokan-form-group {
-    margin-bottom: 15px;
-    width: 50%;
-    float: left;
-}
 
-.dokan-w6 {
-    width: 65%;
-    float: left;
-}
 
-.dokan-form-horizontal {
-    text-align: center;
-    margin-top: 30px;
-}
-.dokan-form-horizontal .dokan-control-label {
-    margin-top: 4px;
-}
-body.page.page-id-202.page-template-advance-search .site-footer {
-    margin-top: 30px;
-    color: #e8e8e8;
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-}*/
+
 .warnings_panel{
+
 	display:none;
+
 	width:100%;
+
 	height:10%;
+
 	text-align:center;
+
 	color:#ff0000;
+
 	border:1px solid #ff0000;
+
 	padding:5px 10px;
+
 	margin-bottom:10px;
+
 }
+
 .sliderCover, #disNull, .rdBtn_control {
+
 	display:inline-block;
+
 	float:left;
+
 }
+
 .sliderCover{
+
 	width: 212px;
+
 	margin-left: 15px;
+
 	padding:0 5px;
+
 }
+
 .rdBtn_control{
+
 	width:100%;
+
 	margin-top: 10px;
+
 }
+
 #disNull{
+
 	    margin: 0px;
+
 }
+
 .rdBtn_control #disTrue {
+
     margin: 4px 14px 0px 0;
+
     float: left;
+
 }
+
 .widget-area .woocommerce div.product.priceBox{
+
 	display:inline-block;
+
 	width:100%;
+
 }
+
 .advance_search {
+
     display: inline-block;
+
     float: left;
+
     width: 100%;
+
     max-width: 555px;
+
 	margin-bottom:20px;
+
     padding: 0 100px 0 0;
+
 }
+
 .advance-form-column {
+
     display: inline-block;
+
     float: left;
+
     width: 50%;
+
     margin-top: 35px;
+
 }
+
 .dokan-form-group.hlf_part{
+
 	 display:inline-block;
+
 	 float:left;
+
 	 width: 50%;
+
 	 max-width:50%;
+
 }
+
 .switcher_attrb_cover{
+
 	display: inline-block;
+
 	/*margin-top: 20px;*/
+
 	padding-top: 20px;
+
 	border-top: 1px solid #dedede;
+
 	width: 100%;
+
 }
+
 .advance-form-container input[type="submit"] {
+
 	background: #797A7C;
+
 	color: #fff;
+
 	padding: 10px;
+
 	border: #545252 solid 1px;
+
 	border-radius: 4px;
+
 	width: 300px;
+
 	font-size: 24px;
+
 }
+
 .hlf_part.search_btn_wrapper{
+
 	width: 100%;
+
 	max-width: 100%;
+
 	margin-top:30px;
+
 	text-align:center;
+
 }
+
+
 
 aside .sliderCover {
+
     display: none;
+
 }
+
+
 
 .inputPriceWrapper {
+
     width: 229px;
+
     float: left;
+
     display: inline-block;
+
 	margin-top: -6px;
+
 }
+
+
 
 input#min_price, input#max_price {
+
     width: 32%;
+
     float: left;
+
     margin-left: 4%;
+
 	padding-left: 5px;
+
 }
+
+
 
 input#max_price {
+
     float: right;
+
 }
+
 .dokan-text-left input[type="text"]
+
 {
+
 height:31px;
+
 }
+
 .navbar-brand {
+
 	padding:7px 18px !important;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller {
+
     float: left;
+
     width: 23.5%;
+
     margin-right: 2% !important;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller:nth-child(4n) {
+
     margin-right: 0 !important;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller a {
+
     display: inline-block;
+
     width: 100%;
+
 	color: #fff;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller img.dokan-store-img {
+
     width: 100%;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller:nth-child(2n+1){
+
 clear:none !important;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller p a {
+
 	width:40%;
+
 }
+
 .woocommerce .form-row.user-role label, .woocommerce-page .form-row.user-role label{
+
 display: inline-block !important;
+
 width:100%;
+
 }
+
 .inputPriceWrapper{
+
 	max-width:93%;
+
 }
+
 /********************************************14-10-2015************************/
 
+
+
 .col-md-6.site-info {
+
     width: 100%;
+
+	text-align: center;
+
+    margin-top: 30px;
+
+	color: #AFAFAF;
+
 }
+
+
 
 .woocommerce table.cart td.actions .coupon, .woocommerce-page #content table.cart td.actions .coupon, .woocommerce-page table.cart td.actions .coupon {
+
     float: left;
+
     display: inline-block;
+
     width: 320px;
+
 	margin-right: 10px;
 
+
+
 }
+
 /***************************************************19-10-2015 ***********************************/
+
 .site-header h1.site-title {
+
     margin: 0px !important;
+
 }
+
+
 
 /***************************************************20-10-2015*****************/
 
+
+
 aside#woocommerce_product_search-3, aside#woocommerce_product_search-4, aside#woocommerce_product_search-5, aside#woocommerce_product_search-2 {
-    background-color: #DDD;
+
+    background-color: #242424;
+
 }
+
 .home .slider-container {
+
     margin-bottom: 15px;
-    background-color: #DDD;
+
+    background-color: #000000; color: #333;
+
 }
+
 div#secondary {
+
     padding-left: 0;
+
 }
+
 .summary.entry-summary h1, .related.products h2 {
+
     color: #fff;
+
 }
+
+
+
 
 
 .woocommerce.single-product .entry-summary div[itemprop="description"], .woocommerce-page.single-product .entry-summary div[itemprop="description"] {
+
     margin: 20px 0;
+
     color: #FFFFFF !important;
+
 }
+
 .woocommerce.single-product .entry-summary .product_meta .posted_in, .woocommerce-page.single-product .entry-summary .product_meta .posted_in, .woocommerce.single-product .entry-summary .product_meta .posted_in a, .woocommerce-page.single-product .entry-summary .product_meta .posted_in a, .site-content .entry-header .entry-title {
+
     color: #FFFFFF !important;
+
 }
+
 .breadcrumb > li {
+
     display: inline-block;
+
     color: #fff;
+
 }
+
+
 
 .advance-form-container label {
+
     color: #fff;
+
 }
+
+
 
 span#upPriceLabel, span#upAlcohalLabel, span#upRatingLabel, .store_locator h1 {
+
     color: #FFFFFF !important;
+
 }
 
+
+
 .dokan-form-control, .woocommerce .archive-title .woocommerce-ordering select, .woocommerce-page .archive-title .woocommerce-ordering select, .woocommerce form .form-row input.input-text, .select2-container .select2-choice, .woocommerce form .form-row textarea{
-    border-color: transparent;
+
+    border-color: #66afe9;
+
     outline: 0;
+
     -webkit-box-shadow:none;
+
     box-shadow:none;
-	background-color: transparent; color:#555555;
+
+	background-color: transparent; color:#fff;
+
 }
+
+
+
+
 
 
 
 .dokan-form-control:focus, .woocommerce .archive-title .woocommerce-ordering select:focus, .woocommerce-page .archive-title .woocommerce-ordering select:focus, .woocommerce form .form-row input.input-text:focus, .select2-container .select2-choice:focus, .woocommerce form .form-row textarea:focus, select2-container .select2-choice:focus{
+
     border-color: #66afe9;
+
     outline: 0;
+
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-	background-color: transparent; color:#555555;
+
+	background-color: transparent; color:#fff;
+
 }
+
+.dokan-form-control, .woocommerce .archive-title .woocommerce-ordering select, .woocommerce-page .archive-title .woocommerce-ordering select, .woocommerce form .form-row input.input-text:focus, .select2-container .select2-choice, .woocommerce form .form-row textarea:focus, select2-container .select2-choice{
+
+    border-color: #66afe9;
+
+    outline: 0;
+
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+	background-color: transparent; color:#fff;
+
+}
+
+.dokan-dashboard .dokan-form-control{ border-color: #66afe9;
+
+    outline: 0;
+
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+	background-color: transparent; color:#fff;
+
+}
+
+
+
+.page-template-advance-search .dokan-form-control{
+
+    border-color: #66afe9;
+
+    outline: 0;
+
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+	background-color: transparent; color:#fff;
+
+}
+
+::-webkit-input-placeholder {
+
+   color: #fff !important;
+
+}
+
+
+
+ :-moz-placeholder{ /* Firefox 18- */
+
+   color: fff !important;  
+
+}
+
+
+
+::-moz-placeholder {  /* Firefox 19+ */
+
+   color: #fff !important;  
+
+}
+
+
+
+:-ms-input-placeholder {  
+
+   color: #fff !important;  
+
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+
+    background-color: #000000 !important;
+
+    border-color: #fff;
+
+}
+
+
+
 .dokan-form-control:visited, .woocommerce .archive-title .woocommerce-ordering select:visited, .woocommerce-page .archive-title .woocommerce-ordering select:visited, .woocommerce form .form-row input.input-text:visited, .select2-container .select2-choice:visited, .woocommerce form .form-row textarea:visited, select2-container .select2-choice:visited{ color:#fff;}
 
+
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller address {
+
     color: #fff;
+
 }
+
+
 
 .entry-content h2, .entry-content p {
+
     color: #fff;
+
 }
-.panel.entry-content h2, .panel.entry-content p{color:#222;}
+
+.panel.entry-content h2, .panel.entry-content p{color:#fff;}
+
+
 
 body.page.page-id-18 div#primary, body.page.page-id-16 div#primary, body.page.page-id-17 div#primary {
+
     padding-left: 0px;
+
 	padding-right: 15px;
+
 }
+
 body.page.page-id-18 div#secondary, body.page.page-id-16 div#secondary,  body.page.page-id-17 div#secondary {
+
     padding-right: 0;
+
 	padding-left: 15px;
+
 }
+
+
 
 table.shop_table.shop_table_responsive.my_account_orders {
+
     color: #fff;
+
 }
+
+
 
 legend {
+
     color: #fff !important;
+
     line-height: 40px !important;
+
 }
+
 .woocommerce table.shop_table {
+
     border: 1px solid #fff !important;}
+
 	
+
 .woocommerce-cart table.cart th {
+
     color: #fff;
+
 }
+
+
 
 ul.payment_methods.methods p {
-    color: #444;
+
+    color: #fff;
+
 }
+
 .woocommerce-cart .cart-collaterals .cart_totals tr td, .woocommerce-cart .cart-collaterals .cart_totals tr th {
+
     color: #fff;
+
 }
+
 label.checkbox {
+
     color: #5e5e5e;
+
 }
+
 table.shop_table.woocommerce-checkout-review-order-table tr td, table.shop_table.woocommerce-checkout-review-order-table tr th{
+
     color: #fff;
+
 }
+
+
 
 p.woocommerce-result-count {
+
     color: #fff;
+
 }
+
+
 
 .archive-title h1 {
+
     color: #fff;
+
 }
+
+
 
 .woocommerce-cart table.cart td, .woocommerce-cart table.cart th {
+
     vertical-align: middle;
+
     color: #fff;
+
 }
+
 .woocommerce table.shop_table thead  tr {
+
     border-bottom: #fff solid 1px !important;
+
 }
+
 h3#order_review_heading {
+
     color: #fff;
+
 }	
 
+
+
 span.sku_wrapper {
+
     color: #fff;
+
 }
+
+
 
 .dokan-form-control option {
+
     color: #444;
+
 }
+
+
 
 .entry-content .woocommerce form h3 {
+
     color: #fff;
+
 }
+
+
 
 table.table.table-striped.product-listing-table tr th {
+
     color: #fff;
+
 }
+
 .dokan-form-group label, .dokan-dashboard header.dokan-dashboard-header h1 {
+
     color: #fff;
+
 }
+
+
 
 .postbox h3 {
+
     color: #fff;
+
 }
+
 table#dokan-comments-table tr th {
+
     color: #fff;
+
 }
+
+
 
 table#dokan-comments-table tr td {
+
     color: #fff;
+
 }
+
+
 
 table.table.table-striped tr th {
+
     color: #fff;
+
 }
+
+
 
 tr.dps-shipping-location td label {
+
     color: #222;
+
 }
 
+
+
 .woocommerce table.shop_table td, .woocommerce table.shop_table tfoot th {
+
     color: #fff;
+
 }
+
+
 
 .col2-set.addresses h3 {
+
     color: #fff;
+
 }
+
 	
+
 .woocommerce table.shop_table th, .woocommerce .addresses, .woocommerce-page .addresses {
+
 	color: #fff;
+
 }
 
-/**********************************************responsive 14-10-2015 *********************************/
 
 
 
- @media only screen and (max-width: 1024px) {
+
+
+
+/**********************************************26-10-2015*********************************************/
+
+
+
+#page .navbar-top-area.navbar-inverse {
+
+    background-color: #242424;
+
+	    border: 1px solid #444444;
+
+}
+
+
+
+#page .navbar-top-area .navbar-nav > li > a{color:#fff;}
+
+.widget_shopping_cart_content {
+
+    color: #444;
+
+}
+
+.woocommerce .site-content div.product .woocommerce-tabs .panel, .woocommerce-page .site-content div.product .woocommerce-tabs .panel, .woocommerce .site-content #content div.product .woocommerce-tabs .panel, .woocommerce-page .site-content #content div.product .woocommerce-tabs .panel {
+
+    border: 1px solid #444 !important;
+
+    background-color: #242424 !important;
+
+}
+
+.woocommerce-tabs ul.tabs li {
+
+    background-color: #242424 !important;
+
+    border: #444 solid 1px !important;
+
+	box-shadow:none !important;
+
+}
+
+.woocommerce-tabs ul.tabs li.active{box-shadow: inset 0px 4px 0px #2980b9 !important;}
+
+
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active, .woocommerce-page div.product .woocommerce-tabs ul.tabs li.active, .woocommerce #content div.product .woocommerce-tabs ul.tabs li.active, .woocommerce-page #content div.product .woocommerce-tabs ul.tabs li.active {
+
+    background: #fff;
+
+    z-index: 2;
+
+    border-bottom-color: #242424 !important;
+
+}
+
+
+
+.woocommerce div.product p.price, .woocommerce div.product span.price {
+
+    color: #FFFFFF;
+
+}
+
+
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li a, .list-unstyled, .panel strong {
+
+    color: #FFFFFF;
+
+}
+
+div#reviews #comments {
+
+    background: #242424;
+
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs:before {
+
+    border-bottom: 1px solid #444;
+
+}
+
+
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{color:#fff;}
+
+.woocommerce .woocommerce-message, .woocommerce-page .woocommerce-message, .woocommerce .woocommerce-error, .woocommerce-page .woocommerce-error, .woocommerce .woocommerce-info, .woocommerce-page .woocommerce-info {
+
+    background: #242424 !important;
+
+    box-shadow: none;
+
+    border-left: 1px solid #444;
+
+    border-right: 1px solid #444;
+
+    border-bottom: 1px solid #444;
+
+    color: #fff;
+
+}
+
+
+
+
+
+.dropdown-menu {
+
+    background-color: #242424 !important;
+
+    border: 1px solid #444 !important;
+
+}
+
+span.quantity {
+
+    color: #fff;
+
+}
+
+p.total {
+
+    color: #fff;
+
+}
+
+.dokan-store div#primary {
+
+    padding: 0px;
+
+}
+
+/*.store-page-wrap .profile-frame{background:url(css/images/profile_banner.jpg) no-repeat;}*/
+
+.dokan-single-store .profile-frame .profile-info-box {
+
+    height: 100%;
+
+    background: rgba(36, 36, 36, 0.67);
+
+}
+
+
+
+.woocommerce .addresses .address, .woocommerce-page .addresses .address {
+
+    background: #242424 !important;
+
+    padding: 10px;
+
+    border: 1px solid #444 !important;
+
+}
+
+
+
+body.home.blog.dokan-store aside.widget.dokan-category-menu {
+
+    margin-bottom: 5px;
+
+    display: none;
+
+}
+
+.dokan-store div#secondary {
+
+	width: 100%;
+
+	background: #393939;
+
+	float: left;
+
+}
+
+
+
+.dokan-store  .widget-area.widget-collapse.collapse {
+
+    width: 100%;
+
+	    float: right;
+
+}
+
+
+
+.dokan-store aside.widget {
+
+    background-color: transparent;
+
+    border: none;
+
+    width: 33%;
+
+    float: left;
+
+}
+
+
+
+.dokan-store .widget .widget-title {
+
+    border-bottom: 1px solid #535353 !important;
+
+    border-left: none !important;
+
+    padding-bottom: 15px;
+
+    font-weight: bold !important;
+
+    color: #e8e8e8;
+
+    font-size: 16px;
+
+    margin: 0px 0px 15px;
+
+}
+
+
+
+.dokan-store .form-control {
+
+    background-color: #000;
+
+    border: none;
+
+	color: #fff;
+
+}
+
+
+
+.dokan-store .widget ul li {
+
+    border: none;
+
+}
+
+
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active:after {
+
+    box-shadow: -2px 2px 0 #242424;
+
+	display:none;
+
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active:before {
+
+    box-shadow: 2px 2px 0 #242424;
+
+	display:none;
+
+}
+
+
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li:before {
+
+    left: -6px;
+
+    -webkit-border-bottom-right-radius: 4px;
+
+    -moz-border-bottom-right-radius: 4px;
+
+    border-bottom-right-radius: 4px;
+
+    border-width: 0 1px 1px 0;
+
+    box-shadow: 2px 2px 0 #242424;
+
+	display:none;
+
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li:after {
+
+    right: -6px;
+
+    -webkit-border-bottom-left-radius: 4px;
+
+    -moz-border-bottom-left-radius: 4px;
+
+    border-bottom-left-radius: 4px;
+
+    border-width: 0 0 1px 1px;
+
+    box-shadow: -2px 2px 0 #242424;
+
+	display:none;
+
+}
+
+
+
+
+
+.dokan-store h2.slider-heading {
+
+    font-weight: 300;
+
+    margin: 0 0 15px;
+
+    padding: 6px 0 5px 10px;
+
+    font-size: 20px;
+
+    float: left;
+
+    width: 100%;
+
+    background-color: #242424;
+
+    border: #444 solid 1px;
+
+    line-height: 35px;
+
+}
+
+.dokan-store .site-footer {
+
+    margin-top: 0;
+
+}
+
+.dokan-store form#quick_search {
+
+    display: inline-block;
+
+    float: right;
+
+}
+
+.dokan-store h2.slider-heading input.search-field {
+
+    width: 280px;
+
+    float: right;
+
+    background-color: transparent;
+
+    border: #444 solid 1px;
+
+    font-size: 14px;
+
+    line-height: 30px;
+
+    padding: 0 6px;
+
+    margin-right: 10px;
+
+	color: #fff;
+
+}
+
+.woocommerce #review_form #respond textarea {
+
+    background-color: #000;
+
+    border: none;
+
+    color: #fff;
+
+    padding: 5px 10px;
+
+}
+
+
+
+.woocommerce #review_form input {
+
+    background-color: #000;
+
+    border: none;
+
+    color: #fff;
+
+    padding: 5px 10px;
+
+}
+
+.dokan-message, .dokan-info, .dokan-error {
+
+    padding: 15px 15px 15px 50px;
+
+    margin: 5px 0 15px 0;
+
+    position: relative;
+
+    background: #242424 !important;
+
+    border-bottom: 1px solid #444 !important;
+
+    border-left: 1px solid #444 !important;
+
+    border-right: 1px solid #444 !important;
+
+    -moz-border-radius: 4px;
+
+    -webkit-border-radius: 4px;
+
+    border-radius: 4px;
+
+}
+
+body .site-header{background:#000; border-bottom: 2px solid transparent;
+
+    box-shadow: none;}
+
+
+
+body .site-header .navbar-default {
+
+    background-color: #000;
+
+    border: none;
+
+    border-top: 1px solid #000;
+
+}
+
+
+
+body .site-header .navbar-default .navbar-brand {
+
+    color: #fff;
+
+}
+
+body .dropdown-menu > li > a{color:#fff;}
+
+body .dropdown-menu > li > a:hover{color:#333;}
+
+.woocommerce.single-product .entry-summary form.cart .button, .woocommerce-page.single-product .entry-summary form.cart .button {
+
+    background: #2980b9 !important;
+
+}
+
+
+
+.woocommerce p.stars a:hover{ color:#f05025;}
+
+form#commentform input {
+
+    background-color: #000;
+
+    border: none;
+
+}
+
+.breadcrumb li a{color:#fff;}
+
+
+
+.woocommerce ul.products li.product .item-bar .price, .woocommerce-page ul.products li.product .item-bar .price {
+
+    padding: 0px 10px 0 10px !important;
+
+    width:100%;
+
+}
+
+.woocommerce ul.products li.product .price del{display:inline-block; float:left;}
+
+.woocommerce ul.products li.product .price ins {
+
+    float: right;
+
+    display: inline-block;
+
+    text-align: right;
+
+}
+
+.panel.entry-content .table > thead > tr > th {
+
+    vertical-align: bottom;
+
+    border-bottom: 2px solid #444 !important ;
+
+}
+
+.panel.entry-content .table > thead > tr > th{background:#242424 !important;}
+
+.panel.entry-content .table > tbody > tr {
+
+    background-color: #242424;
+
+}
+
+
+
+.woocommerce ul.products li.product .price {
+
+    color: #fff;
+
+}
+
+
+
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget {
+
+    background: #242424 !important;
+
+    border: 1px solid #444 !important;
+
+}
+
+
+
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+
+    background-color: #242424 !important;
+
+}
+
+body .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table tr.pending {
+
+    background: #242424;
+
+}
+
+body .dokan-reports-content .dokan-reports-area ul.chart-legend {
+
+    background: #242424;
+
+    list-style: none;
+
+    margin: 0;
+
+    padding: 0;
+
+    border: 1px solid #444;
+
+}
+
+body .dokan-reports-content .dokan-reports-area ul.chart-legend li {
+
+    color: #fff;
+
+    padding: 13px 18px;
+
+    border-bottom: 1px solid #444;
+
+}
+
+
+
+.woocommerce-checkout #payment {
+
+    background: #242424;
+
+    border-radius: 5px;
+
+    color: #fff;
+
+}
+
+.woocommerce-checkout #payment ul.payment_methods {
+
+    border-bottom: 1px solid #444;
+
+}
+
+
+
+p.form-row.terms label {
+
+    color: #fff;
+
+}
+
+
+
+/*********************************************29-10-2015******************************************************/
+
+
+
+span.price {
+
+    display: block;
+
+    width: 100%;
+
+}
+
+
+
+span.price ins {
+
+    float: right;
+
+}
+
+
+
+h2.slider-heading.qSearchTitle{font-weight: 300;
+
+    margin: 0 0 15px;
+
+    padding: 5px 0 5px 10px;
+
+    font-size: 20px;
+
+	background: #242424 ;
+
+    color: #ffffff;
+
+	border:#444 solid 1px;
+
+}
+
+
+
+.sidebar-search .col-md-3 {
+
+    padding: 0px;
+
+}
+
+aside#genMap {
+
+    border: none;
+
+}
+
+aside#genMap label {
+
+    margin-bottom: 0px;
+
+}
+
+aside#genMap {
+
+    padding-bottom: 2px;
+
+}
+
+
+
+
+
+
+
 div#secondary_sidebar_home {
+
+    padding: 0px;
+
+    background-color: #242424;
+
+    border: #444 solid 1px;
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+}
+
+
+
+div#secondary_sidebar_home .widget-area.col-sm-9.col-md-9 {
+
+    padding: 0px;
+
+    border: none;
+
+}
+
+
+
+
+
+div#secondary_sidebar_home .widget-area.col-sm-9.col-md-9 aside#woocommerce_product_search-3 {
+
+    border: none;
+
+	    padding: 0px;
+
+}
+
+
+
+#wpd-disclaimer {
+
+    background: #242424 !important;
+
+    margin: 0;
+
+    padding: 20px;
+
+}
+
+
+
+.fancybox-skin {
+
+    position: relative;
+
+    background: #000 !important;
+
+    color: #fff !important;
+
+}
+
+.home .slider-container h2.slider-heading {
+
+    border-left: 5px solid #242424 !important;
+
+    background-color: #242424 !important;
+
+}
+
+
+
+#secondary_sidebar_home #woocommerce_product_search-3.widget .product {
+
+    padding: 5px 10px !important;
+
+    width: 50%;
+
+    float: left;
+
+    display: inline-block;
+
+}
+
+
+
+div#secondary_sidebar_home .inputPriceWrapper {
+
+    max-width: 100%;
+
+	    width: 96%;
+
+}
+
+
+
+div#secondary_sidebar_home input#min_price, div#secondary_sidebar_home input#max_price {
+
+    width: 46%;
+
+}
+
+body.home.blog .product.bothbutton {
+
+    margin-top: 28px;
+
+}
+
+body.home.blog .product.noPadding {
+
+	width: auto !important;
+
+	float: right !important
+
+}
+
+
+
+/*****************************************************30-10-2015*****************************/
+
+body.home.blog.dokan-store input#zipcode {
+
+    background-color: #000;
+
+    border: none;
+
+    padding: 6px 12px;
+
+    font-size: 14px;
+
+    line-height: 1.428571429;
+
+    color: #555555;
+
+    border-radius: 4px;
+
+    margin-top: 5px;
+
+}
+
+body.home.blog.dokan-store aside#dokan-store-location-4 .product a {
+
+    float: right;
+
+}
+
+
+
+body.home.blog.dokan-store .location-container #dokan-store-location {
+
+    width: 100%;
+
+    height: 218px !important;
+
+}
+
+
+
+/*****************************************31-10-2015*****************************/
+
+
+
+.spec_tab_content p {
+
+    margin: 0;
+
+}
+
+
+
+
+
+/**********************02-11-2015*****************************************************/
+
+
+
+
+
+.footer-mid-content p span {
+
+    margin: 6px;
+
+	color:white;
+
+}
+
+.footer-mid-content p {
+
+    margin: 15px 0;
+
+    color: #2980b9;
+
+    font-size: 16px;
+
+}
+
+
+
+li.footer-li {
+
+    display: block;
+
+}
+
+
+
+/**************************************************02-11-2015*******************/
+
+
+
+.footer-main.col-md-12, .footer-content-2.col-md-12 {
+
+    float: left;
+
+    padding: 0px 55px;
+
+}
+
+
+
+.footer-mid-content {
+
+    padding: 0px;
+
+}
+
+ul.footer-ul {
+
+    padding: 0px;
+
+}
+
+.footer-content-links {
+
+    float: left;
+
+    width: 100%;
+
+}
+
+.footer-content-2.col-md-12 {
+
+    text-align: center;
+
+}
+
+
+
+.footer-first-content {
+
+    max-width: 590px;
+
+    margin: 0px auto;
+
+}
+
+
+
+.footer-second-content {
+
+    max-width: 690px;
+
+    margin: 0px auto;
+
+}
+
+ul.new-ul-link{
+
+    padding: 0px;
+
+    text-align: left;
+
+    list-style: none;
+
+}
+
+ul.new-ul-link p{float:left;}
+
+ul.new-ul-link li, ul.second-new-ul li{float:left;}
+
+ul.new-ul-link p {
+
+    float: left;
+
+    padding-right: 10px; line-height: 13px;
+
+	    margin-bottom: 0;
+
+}
+
+
+
+ul.new-ul-link li a {
+
+    float: left;
+
+    border-right: #AFAFAF solid 1px;
+
+    line-height: 13px;
+
+    padding: 0 8px;
+
+}
+
+
+
+ul.new-ul-link li a:hover, ul.second-new-ul li a:hover, li.footer-li a:hover{color:#fff;}
+
+
+
+ ul.second-new-ul {
+
+    padding: 0px;
+
+    text-align: left;
+
+    list-style: none;
+
+    float: left;
+
+}
+
+ul.second-new-ul li a {
+
+    float: left;
+
+    line-height: 13px;
+
+    padding: 8px 10px;
+
+}
+
+ul.new-ul-link li:last-child a{border:none;}
+
+
+
+.links-footer a {
+
+    padding: 0px 5px;
+
+}
+
+.site-footer .footer-copy {
+
+    padding: 15px 0 0px 0 !important;
+
+}
+
+.temp {
+
+    width: 100%;
+
+    float: left;
+
+}
+
+
+
+.text input.btn {
+
+    font-size: 0;
+
+    background: url(assets/images/map_location_service_.png) no-repeat #000 7px 7px;
+
+    border-radius: 0;
+
+    padding: 15px 17px;
+
+    background-size: 18px;
+
+}
+
+input.text-block {
+
+    width: 105px;
+
+    float: left;
+
+    line-height: 32px;
+
+    height: 32px;
+
+}
+
+
+
+.col-md-12.footer-section {
+
+    padding: 0px;
+
+}
+
+.footer-main.col-md-12 {
+
+    border-bottom: #302F2F solid 1px;
+
+    padding-bottom: 20px;
+
+    margin-bottom: 5px;
+
+}
+
+
+
+.footer-content-2.col-md-12 {
+
+    border-top: #1D1C1C solid 1px;
+
+    margin-top: 2px;
+
+    padding-top: 20px;
+
+}
+
+
+
+.bottom-icon {
+
+    text-align: left;
+
+}
+
+
+
+.woocommerce .archive-title .woocommerce-ordering select {
+
+    border: 1px solid #66afe9;
+
+    margin: 0;
+
+    padding: 6px 40px 8px 10px;
+
+    width: 100%;
+
+    vertical-align: middle;
+
+    color: #fff;
+
+}
+
+div#dokan-store-location-searched {
+
+    color: #333;
+
+}
+
+input#delivers_to {
+
+    height: 31px;
+
+    margin: 0;
+
+}
+
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table {
+
+    background: #242424 !important;
+
+}
+
+
+
+.dokan-shipping-location-wrapper .dps-shipping-location-content {
+
+    border: 2px solid #444 !important;
+
+}
+
+
+
+td.dps_shipping_location_cost input.form-control {
+
+    background-color: transparent;
+
+	    border-color: #66afe9;
+
+    outline: 0;
+
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6) ;
+
+	color:#fff;
+
+}
+
+
+
+
+
+/*********************************************************04-11-2015***********************************/
+
+
+
+nav.navbar.navbar-default {
+
+    float: right;
+
+    vertical-align: bottom;
+
+    margin-top: 75px;
+
+}
+
+/*********************************************************05-11-2015**************************************/
+
+.col-md-8.col-sm-8.clearfix.rightSideMenu {
+
+    padding: 0px;
+
+}
+
+a.navbar-brand:last-child {
+
+    padding-right: 9px !important;
+
+}
+
+select.orderby option {
+
+    color: #333;
+
+}
+
+
+
+.footer-mid-content.col-md-2.col-sm-2 aside.widget.widget_text {
+
+    width: 100%;
+
+}
+
+.home .product-sliders li .item-bar{color:#fff;}
+
+
+
+.woocommerce-ordering select{ padding:6px 0px 8px 10px !important;}
+
+/*********************************************************06-11-2015**************************************/
+
+
+
+
+
+.home .slider-container h2.slider-heading {
+
+    border-left: 5px solid #000000 !important;
+
+}
+
+
+
+/*********************************************************09-11-2015**************************************/
+
+.woocommerce ul.products li.product, .woocommerce-page ul.products li.product {
+    float: left;
+    margin: 0 1% 2.992em 0;
+    padding: 0;
+    position: relative;
+    width: 24.25%;
+}
+
+.woocommerce ul.products li.last, .woocommerce-page ul.products li.last {
+    margin-right: 0;
+}
+.locate_me_btn{
+	font-size:12px;
+	float:right;
+	text-decoration:underline;
+}
+ul.payment_methods.methods p {
+    color: #000000 !important;
+}
+/*********************************************************17-11-2015**************************************/
+
+@media only screen and (max-width: 1024px) {
+
+div#secondary_sidebar_home {
+
 	display:inline-block;
+
 }
+
 }
+
+
 
 @media only screen and (max-width: 991px) {
+
 .woocommerce #content div.product div.images, .woocommerce div.product div.images, .woocommerce-page #content div.product div.images, .woocommerce-page div.product div.images {
+
     float: left !important;
+
     width: 48% !important;
+
 }
+
 .woocommerce #content div.product div.summary, .woocommerce div.product div.summary, .woocommerce-page #content div.product div.summary, .woocommerce-page div.product div.summary {
+
     float: right!important;
+
     width: 48%!important;
+
 }
+
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller:nth-child(2n) {
+
     margin-right: 0px !important;
+
 }
+
+
 
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller {
+
     float: left;
+
     width: 49%;
+
     margin-right: 2% !important;
-}
-
 
 }
+
+div#secondary_sidebar_home .inputPriceWrapper {
+
+    max-width: 100%;
+
+    width: 95%;
+
+}
+
+div#secondary_sidebar_home{margin-bottom:15px !important;}
+
+
+
+
+
+/***********************02-11-2015****************/
+
+
+
+.footer-main.col-md-12, .footer-content-2.col-md-12 {
+
+    float: left;
+
+    padding: 0px 0 20px;
+
+}
+
+input.text-block {
+
+    width: 59px;
+
+}
+
+.footer-content-2.col-md-12{padding-top:20px;}
+
+}
+
 @media (max-width: 991px) and (min-width: 768px){
+
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a i {
+
     padding-right: 10px;
+
 }
+
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+
     padding: 10px 0 10px 10px;
+
     font-size: 12px;
+
 }
+
 }
+
 @media only screen and (max-width: 768px) {
+
 .home div#primary {
+
     display: inline-block;
+
     float: right;
+
     width: 100%;
+
 }
+
 }
+
+
 
 @media only screen and (max-width: 767px) {
+
 .woocommerce #content div.product div.images, .woocommerce div.product div.images, .woocommerce-page #content div.product div.images, .woocommerce-page div.product div.images {
+
     float: none !important;
+
     width: 100% !important;
+
 }
+
 .woocommerce #content div.product div.summary, .woocommerce div.product div.summary, .woocommerce-page #content div.product div.summary, .woocommerce-page div.product div.summary {
+
     float: none!important;
+
     width: 100%!important;
+
 }
+
 div#primary {
+
     padding: 0px;
+
 }
+
+
 
 .dokan-form-group.hlf_part {
+
     display: inline-block;
+
     float: left;
+
     width: 100%;
+
     max-width: 100%;
+
     padding: 0;
+
 }
+
+
 
 .advance_search {
+
     display: inline-block;
+
     float: left;
+
     width: 100%;
+
     max-width: 100%;
+
     margin-bottom: 20px;
+
     padding: 0;
+
 }
+
+.navbar-top-area .navbar-nav {
+
+    background: #242424 !important;
+
+}
+
+
+
 /**********************************20-10-2015**********************************************/
 
+
+
 .site-header h1.site-title a {
+
     width: 100% !important;
+
     background-position: center !important;
+
 }
 
-	
+body.home.blog.dokan-store aside.widget{width:100%;}
+
+aside#genMap {
+
+    width: 100%;
+
+    float: left;
+
 }
+
+
+
+#secondary_sidebar_home #woocommerce_product_search-3.widget .product {
+
+    padding: 5px 10px !important;
+
+    width: 100%;
+
+	
+
+}
+
+
+
+.footer-main.col-md-12 {
+
+    width: 100%;
+
+    float: left;
+
+}
+
+.footer-mid-content.col-md-2.col-sm-2 {
+
+    width: 50%;
+
+    float: left;
+
+    min-height: 150px;
+
+}
+
+
+
+input.text-block {
+
+    width: 80%;
+
+}
+
+
+
+.links-footer a {
+
+    float: left;
+
+    width: 25%;
+
+    padding: 10px;
+
+}
+
+.links-footer {
+
+    width: 100%;
+
+    float: left;
+
+}
+
+.col-md-6.site-info {
+
+    float: left;
+
+}
+
+
+
+ul.new-ul-link p {
+
+    width: 100%;
+
+    text-align: center;
+
+    padding: 5px 0;
+
+}
+
+
+
+ul.new-ul-link li, ul.second-new-ul li {
+
+    float: left;
+
+    width: 100%;
+
+}
+
+
+
+ul.new-ul-link li a {
+
+    float: left;
+
+    border-right: none;
+
+    line-height: 13px;
+
+    padding: 5px 0px;
+
+    width: 100%;
+
+    text-align: center;
+
+}
+
+
+
+ul.second-new-ul li a {
+
+    float: left;
+
+    line-height: 13px;
+
+    padding: 8px 0px;
+
+    width: 100%;
+
+    text-align: center;
+
+}
+
+ul.second-new-ul {
+
+    width: 100%;
+
+}
+
+
+
+
+
+
+
+/***************************************************05-11-2015-*****************************/
+
+nav.navbar.navbar-default{margin-top:0;}
+
+
+
+
+
+}
+
+
+
+
 
  @media only screen and (max-width: 480px) {
+
 .advance-form-column {
+
     display: inline-block;
+
     float: left;
+
     width: 100%;
+
     margin-top: 35px;
+
 }
+
 .dokan-w4, .dokan-text-left {
+
     width: 100%;
+
     float: left;
+
 }
+
+
 
 .page-id-8 ul.dokan-seller-wrap li.dokan-single-seller {
+
     float: left;
+
     width: 100%;
+
     margin-right: 0 !important;
+
 }
+
+
 
 .site-header h1.site-title a {
+
     width: 100% !important;
+
 }
+
 .woocommerce .login-form form, .woocommerce-page .login-form form {
+
     width: 100% !important;
+
 }
+
 woocommerce .reg-form, .woocommerce-page .reg-form {
+
     padding-top: 20px;
+
     padding-left:0 !important;
+
 }
+
  }
+
 	 
+
  @media only screen and (max-width: 400px) {
+
 .woocommerce table.shop_table{display:inline-block;}
+
 	 
+
 table.shop_table.cart thead, table.shop_table.cart thead tr {
+
     display: inline-block;
+
     width: 100%;
+
 	 
+
  }
+
+
 
 .woocommerce table.cart td.actions .coupon, .woocommerce-page #content table.cart td.actions .coupon, .woocommerce-page table.cart td.actions .coupon{
+
 	width:100%; margin:0px;
+
 	
+
 }
+
+
 
 table.shop_table.cart tbody{
+
     display: inline-block;
+
     width: 100%;
+
 }
+
+
 
 .woocommerce table.shop_table td, .woocommerce table.shop_table tfoot th {
+
 	padding: 6px 7px;
+
     border-top: 1px solid #fff !important;
+
 }
+
+
 
 .woocommerce td.product-quantity {
+
     min-width: auto;
+
 }
+
 	
+
 .woocommerce table.shop_table th {
 
+
+
     padding:9px 11px;
+
     font-size: 13px;
+
     font-weight: normal;
+
 }
 
+
+
 .coupon input {
+
     width: 100% !important;
+
     margin-bottom: 10px !important;
+
 }
+
 .woocommerce .cart .button, .woocommerce .cart input.button {
+
     float: none;
+
     width: 100% !Important;
+
 }
+
 body.single .quantity{
+
   margin:0 0 10px 0 !important;
+
 }
+
 .woocommerce div.product .woocommerce-tabs ul.tabs li a,
+
 .woocommerce div.product .woocommerce-tabs ul.tabs li.active a
+
 {
+
 	font-size:10px;
+
 }
+
 .woocommerce #content div.product .woocommerce-tabs ul.tabs li a, .woocommerce-page #content div.product .woocommerce-tabs ul.tabs li a, .woocommerce #content div.product .woocommerce-tabs ul.tabs li.active a, .woocommerce-page #content div.product .woocommerce-tabs ul.tabs li.active a {
+
     font-weight: normal;
+
     font-size: 12px;
+
 }
+
+
 
 .woocommerce div.product .woocommerce-tabs ul.tabs li:before, .woocommerce div.product .woocommerce-tabs ul.tabs li:after{display:none;}
 
+
+
 /******************************20-10-2015*********************/
 
+
+
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+
     padding: 12px 14px !important;
+
 }
+
+
+
+.links-footer a {
+
+    float: left;
+
+    width: 33%;
+
+    padding: 10px;
+
+}
+
+.footer-mid-content.col-md-2.col-sm-2 {
+
+    width: 100%;
+
+    float: left;
+
+    min-height: 150px;
+
+    text-align: center;
+
+}
+
  }
 
+
+
  @media only screen and (max-width: 320px) {
+
 .woocommerce #content div.product .woocommerce-tabs ul.tabs li a, .woocommerce-page #content div.product .woocommerce-tabs ul.tabs li a{font-size:12px;}
+
+
+
+div#secondary_sidebar_home .inputPriceWrapper {
+
+    max-width: 100%;
+
+    width: 94%;
+
+}
+
  }
+
+ 
+
+ .home .slider-container h2.slider-heading {
+
+    background:#000000 !important;
+
+	color: #ffffff !important;
+
+}
+
+
+
+.home .slider-container h2.slider-heading {
+
+    border-left: 5px solid #000 !important;
+
+}
+
+
+
+body.home.blog .slider-container h2.slider-heading {
+
+    border-left: 5px solid #000000 !important;
+
+    border-bottom: 1px solid #000000;
+
+    border-top: 1px solid #000000;
+
+    border-right: 1px solid #000000;
+
+}
+
+body.home.blog .product-sliders .flex-direction-nav a {
+
+    background: #000000 !important;
+
+}
+
+table.shop_attributes tr {
+
+    color: #fff;
+
+}
+
+#wpd-disclaimer a.agree {
+
+    background: #2980b9 !important;
+
+    background: -moz-linear-gradient(top, #9dd53a 0%, #a1d54f 50%, #80c217 51%, #7cbc0a 100%) !important;
+
+    background: -webkit-linear-gradient(top, #2980B9 0%,#2C84BD 50%,#317BAC 51%,#216490 100%) !important;
+
+    background: -o-linear-gradient((top, #2980B9 0%,#2C84BD 50%,#317BAC 51%,#216490 100%) !important;
+
+    background: -ms-linear-gradient(top, #2980B9 0%,#2C84BD 50%,#317BAC 51%,#216490 100%) !important;
+
+    background: linear-gradient(top, #2980B9 0%,#2C84BD 50%,#317BAC 51%,#216490 100%) !important;
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2980b9', endColorstr='#216490',GradientType=0 ) !important;
+
+}
+.dokan-store-caption{
+min-height:275px;
+}

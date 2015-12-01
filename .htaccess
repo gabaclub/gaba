@@ -1,11 +1,11 @@
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /gaba/
+RewriteBase /deVeL0pment/newgrab/
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /gaba/index.php [L]
+RewriteRule . /deVeL0pment/newgrab/index.php [L]
 </IfModule>
 
 # END WordPress
@@ -42,3 +42,7 @@ ExpiresByType application/x-shockwave-flash "access 1 month"
 ExpiresByType image/x-icon "access 1 year"
 </IfModule>
 ## EXPIRES CACHING ##
+AuthName "newgrab"
+AuthUserFile "/home/projecti/.htpasswds/public_html/deVeL0pment/newgrab/passwd"
+AuthType Basic
+require valid-user
